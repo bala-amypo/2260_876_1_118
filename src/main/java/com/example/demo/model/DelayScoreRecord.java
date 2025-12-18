@@ -53,7 +53,7 @@ public class DelayScoreRecord {
         this.stuemail=stuemail;
         this.cgpa=cgpa;
     }
-    public Student(){
+    public DelayScoreRecord(){
 
     }
 

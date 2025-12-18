@@ -14,25 +14,32 @@ public class DelayScoreRecord {
     public void setId(int id){
         this.id = id;
     }
-    public String supplierCode(){
+    public String getsupplierCode(){
         return supplierCode;
     }
-    public void supplierCode(String supplierCode){
+    public void setsupplierCode(String supplierCode){
         this.supplierCode=supplierCode;
     }
-    public String supplierCode(){
-        return supplierCode;
+    public String getsupplierName(){
+        return supplierName;
     }
-    public void supplierCode(String supplierCode){
-        this.supplierCode=supplierCode;
+    public void setsupplierNamee(String supplierName){
+        this.supplierName=supplierName;
     }
 
-    public String getStuemail(){
-        return stuemail;
+    public String getemail(){
+        return email;
     }
-    public void setStuemail(String stuemail){
-        this.stuemail=stuemail;
+    public void setemail(String stuemail){
+        this.email=email;
     }
+    public String getphone(){
+        return email;
+    }
+    public void setphone(String phone){
+        this.phone=phone;
+    }
+
     public float cgpa(){
         return cgpa;
     }

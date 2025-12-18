@@ -14,40 +14,40 @@ public class DelayScoreRecord {
     public void setId(int id){
         this.id = id;
     }
-    public String getsupplierCode(){
+    public String getSupplierCode(){
         return supplierCode;
     }
-    public void setsupplierCode(String supplierCode){
+    public void setSupplierCode(String supplierCode){
         this.supplierCode=supplierCode;
     }
-    public String getsupplierName(){
+    public String getSupplierName(){
         return supplierName;
     }
-    public void setsupplierNamee(String supplierName){
+    public void setSupplierNamee(String supplierName){
         this.supplierName=supplierName;
     }
 
-    public String getemail(){
+    public String getEmail(){
         return email;
     }
-    public void setemail(String stuemail){
+    public void setEmail(String stuemail){
         this.email=email;
     }
-    public String getphone(){
+    public String getPhone(){
         return email;
     }
-    public void setphone(String phone){
+    public void setPhone(String phone){
         this.phone=phone;
     }
 
-    public float cgpa(){
-        return cgpa;
+    public boolean getActive(){
+        return active;
     }
-    public void setCgpa(float cgpa){
-        this.cgpa=cgpa;
+    public void setActive(boolean active){
+        this.active=active;
     }
 
-    public Student(int id,String stuname,String stuemail,float cgpa){
+    public DelayScoreRecord(long id,String supplierCode, String supplierName, String email, String phone, boolean active;){
         this.id=id;
         this.stuname=stuname;
         this.stuemail=stuemail;

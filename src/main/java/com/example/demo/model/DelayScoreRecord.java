@@ -1,22 +1,32 @@
 package com.example.demo.model;
 public class DelayScoreRecord {
-    private Long id;
-    private String stuname;
-    private String stuemail;
-    private float cgpa;
+    @Id
+    private long id;
+    private String supplierCode;
+    private String supplierName;
+    private String email;
+    private String phone;
+    private boolean active;
     
-    public int getId(){
+    public long getId(){
         return id;
     }
     public void setId(int id){
         this.id = id;
     }
-    public String getStuname(){
-        return stuname;
+    public String supplierCode(){
+        return supplierCode;
     }
-    public void setStuname(String stuname){
-        this.stuname=stuname;
+    public void supplierCode(String supplierCode){
+        this.supplierCode=supplierCode;
     }
+    public String supplierCode(){
+        return supplierCode;
+    }
+    public void supplierCode(String supplierCode){
+        this.supplierCode=supplierCode;
+    }
+
     public String getStuemail(){
         return stuemail;
     }

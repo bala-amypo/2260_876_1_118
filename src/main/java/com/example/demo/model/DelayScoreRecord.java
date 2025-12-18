@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import java.LocalDateTime;
 public class DelayScoreRecord {
     @Id
     private long id;

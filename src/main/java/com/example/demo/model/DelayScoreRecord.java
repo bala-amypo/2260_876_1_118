@@ -3,10 +3,12 @@ public class DelayScoreRecord {
     @Id
     private long id;
     private String supplierCode;
+    @supplierCode(Unique=true);
     private String supplierName;
     private String email;
     private String phone;
     private boolean active;
+    private LocalDateTime createdAt;
     
     public long getId(){
         return id;
@@ -49,9 +51,12 @@ public class DelayScoreRecord {
 
     public DelayScoreRecord(long id,String supplierCode, String supplierName, String email, String phone, boolean active;){
         this.id=id;
-        this.stuname=stuname;
-        this.stuemail=stuemail;
-        this.cgpa=cgpa;
+        this.supplierCode=supplierCode;
+        this.supplierName=supplierName;
+        this.email=email;
+        this.phone=phone;
+        this.active=active;
+
     }
     public DelayScoreRecord(){
 

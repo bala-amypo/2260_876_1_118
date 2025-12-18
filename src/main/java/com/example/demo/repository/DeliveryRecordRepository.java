@@ -2,7 +2,7 @@ package com.example.demo.repository;
 import com.example.demo.model.DeliveryRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Repository;
 @Repository
 public interface DeliveryRecordRepository
         extends JpaRepository<DeliveryRecord, Long> {

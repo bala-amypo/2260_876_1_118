@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.example.demo.model.Supplier;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 
 @RestController
@@ -20,28 +20,28 @@ public class SupplierProfileController {
     }
 
     @PostMapping("/")
-    public Supplier createSupplier(@RequestBody Supplier supplier) {
+    public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
         return supplierService.createSupplier(supplier);
     }
 
     @GetMapping("/{id}")
-    public Supplier getSupplier(@PathVariable Long id) {
+    public SupplierProfile getSupplier(@PathVariable Long id) {
         return supplierService.getSupplierById(id);
     }
 
     @GetMapping("/")
-    public List<Supplier> getAllSuppliers() {
+    public List<SupplierProfile> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
     @PutMapping("/{id}/status")
-    public Supplier updateStatus(@PathVariable Long id,
+    public SupplierProfile updateStatus(@PathVariable Long id,
                                  @RequestParam boolean active) {
         return supplierService.updateSupplierStatus(id, active);
     }
 
     @GetMapping("/lookup/{supplierCode}")
-    public Supplier getBySupplierCode(@PathVariable String supplierCode) {
+    public SupplierProfile getBySupplierCode(@PathVariable String supplierCode) {
         return supplierService.getBySupplierCode(supplierCode);
     }
 }

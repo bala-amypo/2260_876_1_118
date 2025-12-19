@@ -19,7 +19,7 @@ public class PurchaseOrderController {
         this.poService = poService;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public PurchaseOrderRecord createPO(@RequestBody PurchaseOrderRecord po) {
         return poService.createPurchaseOrder(po);
     }
@@ -31,10 +31,11 @@ public class PurchaseOrderController {
 
     @GetMapping("/{id}")
     public PurchaseOrderRecord getPO(@PathVariable Long id) {
-        return poService.getPOById(id);
+        return poService.getPOById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase order not found"));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<PurchaseOrderRecord> getAllPOs() {
         return poService.getAllPurchaseOrders();
     }

@@ -47,7 +47,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
-        if (!supplier.isActive()) {
+        if (!supplier.getActive()) {
             throw new RuntimeException("Inactive supplier");
         }
 

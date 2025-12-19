@@ -31,6 +31,10 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Username already exists");
         }
 
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new BadRequestException("Email already exists");
+        }
+
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -39,5 +43,11 @@ public class AuthServiceImpl implements AuthService {
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
+    }
+
+    // ✅ IMPLEMENTED INTERFACE METHOD
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

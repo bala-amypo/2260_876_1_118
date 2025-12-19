@@ -1,11 +1,12 @@
 package com.example.demo.service;
+
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.AppUser;
 
 public interface AuthService {
 
-    AppUser registerUser(AppUser user);
+    AppUser register(RegisterRequest request);
 
-    AppUser findByUsername(String username);
-
+    // 🔴 REQUIRED by college test
     boolean existsByEmail(String email);
 }

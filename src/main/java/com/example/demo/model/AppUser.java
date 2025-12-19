@@ -21,6 +21,11 @@ public class AppUser {
     private Set<String> roles;
 
     private LocalDateTime createdAt;
+    import com.example.demo.model.Role;
+
+@Enumerated(EnumType.STRING)
+private Role role;
+
 
     public AppUser() {
     }

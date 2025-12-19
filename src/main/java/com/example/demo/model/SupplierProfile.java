@@ -74,7 +74,7 @@ public class SupplierProfile {
         this.phone = phone;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 

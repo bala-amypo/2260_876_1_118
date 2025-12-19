@@ -40,5 +40,18 @@ public class PurchaseOrderRecord {
         this.promisedDeliveryDate = promisedDeliveryDate;
         this.issuedDate = issuedDate;
     }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public LocalDate getPromisedDeliveryDate() {
+        return promisedDeliveryDate;
+    }
+
 }
 

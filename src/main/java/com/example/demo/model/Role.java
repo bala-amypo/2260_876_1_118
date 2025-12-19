@@ -3,5 +3,6 @@ package com.example.demo.model;
 public enum Role {
     USER,
     ADMIN,
-    ANALYST
+    MANAGER,   // ✅ ADD THIS
+    ANALYST    // optional, keep if needed
 }

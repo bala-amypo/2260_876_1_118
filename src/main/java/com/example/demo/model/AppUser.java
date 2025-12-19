@@ -2,10 +2,10 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "app_user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
 public class AppUser {
@@ -14,28 +14,26 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String username;
     private String email;
     private String password;
 
-    @ElementCollection
-    private Set<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private LocalDateTime createdAt;
-    import com.example.demo.model.Role;
-
-@Enumerated(EnumType.STRING)
-private Role role;
-
 
     public AppUser() {
     }
 
-    public AppUser(Long id, String email, String password,
-                   Set<String> roles, LocalDateTime createdAt) {
+    public AppUser(Long id, String username, String email,
+                   String password, Role role,
+                   LocalDateTime createdAt) {
         this.id = id;
+        this.username = username;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
         this.createdAt = createdAt;
     }
 
@@ -45,6 +43,14 @@ private Role role;
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -63,12 +69,12 @@ private Role role;
         this.password = password;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

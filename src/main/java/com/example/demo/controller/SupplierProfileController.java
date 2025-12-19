@@ -26,9 +26,9 @@ public class SupplierProfileController {
         return supplierService.createSupplier(supplier);
     }
 
-    // Get supplier by ID
+    // Get a supplier by ID
     @GetMapping("/{id}")
-    public SupplierProfile getSupplier(@PathVariable Long id) {
+    public SupplierProfile getSupplierById(@PathVariable Long id) {
         return supplierService.getSupplierById(id);
     }
 
@@ -38,16 +38,16 @@ public class SupplierProfileController {
         return supplierService.getAllSuppliers();
     }
 
-    // Update supplier status (active/inactive)
+    // Update supplier active status
     @PutMapping("/{id}/status")
-    public SupplierProfile updateStatus(@PathVariable Long id,
-                                        @RequestParam boolean active) {
+    public SupplierProfile updateSupplierStatus(@PathVariable Long id,
+                                                @RequestParam boolean active) {
         return supplierService.updateSupplierStatus(id, active);
     }
 
-    // Get supplier by supplierCode
+    // Get supplier by supplier code
     @GetMapping("/lookup/{supplierCode}")
-    public SupplierProfile getBySupplierCode(@PathVariable String supplierCode) {
+    public SupplierProfile getSupplierByCode(@PathVariable String supplierCode) {
         return supplierService.getBySupplierCode(supplierCode);
     }
 }

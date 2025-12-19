@@ -1,12 +1,13 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AppUser;
 import com.example.demo.model.Role;
 import com.example.demo.repository.AppUserRepository;
@@ -27,32 +28,37 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AppUser registerUser(RegisterRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new BadRequestException("Username already exists");
-        }
-
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already exists");
+        // ✅ FIXED: email-based check
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
         }
 
         AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER);
+        user.setRoles(Collections.singleton(request.getRole().name()));
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
 
     @Override
-    public AppUser findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+    public AppUser authenticate(LoginRequest request) {
+
+        // ✅ FIXED: email-based lookup
+        AppUser user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user;
     }
 
+    // ✅ REQUIRED by interface
     @Override
     public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return userRepository.existsByEmail(email);
     }
 }

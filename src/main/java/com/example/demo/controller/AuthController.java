@@ -1,15 +1,14 @@
 package com.example.demo.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.AppUser;
 import com.example.demo.service.AuthService;
 
 @RestController
-@RequestMapping("/auth")
-@Tag(name = "Authentication")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -19,16 +18,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AppUser register(@RequestBody AppUser user) {
-        return authService.registerUser(user);
+    public ResponseEntity<AppUser> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.registerUser(request));
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody AppUser user) {
-        AppUser existingUser = authService.findByUsername(user.getEmail());
-        if (existingUser != null) {
-            return "Login successful";
-        }
-        return "Invalid credentials";
+    @GetMapping("/user/{username}")
+    public ResponseEntity<AppUser> getUser(@PathVariable String username) {
+        return ResponseEntity.ok(authService.findByUsername(username));
     }
 }

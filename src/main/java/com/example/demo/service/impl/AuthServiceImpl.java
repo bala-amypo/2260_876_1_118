@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AppUser register(RegisterRequest request) {
+    public AppUser registerUser(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username already exists");
@@ -45,7 +45,12 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.save(user);
     }
 
-    // ✅ IMPLEMENTED INTERFACE METHOD
+    @Override
+    public AppUser findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+    }
+
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();

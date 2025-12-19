@@ -10,6 +10,7 @@ public interface AuthService {
 
     AppUser authenticate(LoginRequest request);
 
-    // ✅ REQUIRED by hidden tests
+    AppUser findByUsername(String username);
+
     boolean existsByEmail(String email);
 }

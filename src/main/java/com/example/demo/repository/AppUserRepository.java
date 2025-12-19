@@ -10,9 +10,11 @@ import com.example.demo.model.AppUser;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-    // ✅ REQUIRED by AuthService & hidden tests
+    Optional<AppUser> findByUsername(String username);
+
     Optional<AppUser> findByEmail(String email);
 
-    // ✅ REQUIRED by hidden tests
+    boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
 }

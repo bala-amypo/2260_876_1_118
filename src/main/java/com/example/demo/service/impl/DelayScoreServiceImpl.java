@@ -58,7 +58,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
                 lastDelivery.getActualDeliveryDate()
         );
 
-        // Prevent negative delay (early delivery)
         long effectiveDelay = Math.max(0, delayDays);
 
         DelayScoreRecord record = new DelayScoreRecord();
@@ -67,7 +66,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setDelayDays((int) effectiveDelay);
         record.setDelaySeverity(effectiveDelay > 5 ? "HIGH" : "LOW");
 
-        // ✅ FIXED: Explicit double calculation
         record.setScore(Math.max(0.0, 100.0 - (effectiveDelay * 5.0)));
 
         record.setComputedAt(java.time.LocalDateTime.now());

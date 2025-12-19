@@ -49,14 +49,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AppUser authenticate(LoginRequest request) {
 
-        AppUser user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+    AppUser user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
+    }
 
-        return user;
+    return user;
     }
 
     @Override

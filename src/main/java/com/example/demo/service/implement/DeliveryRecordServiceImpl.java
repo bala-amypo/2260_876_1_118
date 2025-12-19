@@ -30,8 +30,3 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
         return repo.findAll();
     }
 }
-SupplierProfileServiceImpl.java
-│ │ ├─ PurchaseOrderServiceImpl.java
-│ │ ├─ DeliveryRecordServiceImpl.java
-│ │ ├─ DelayScoreServiceImpl.java
-│ │ └─ SupplierRiskAlertServiceImpl.java

@@ -3,7 +3,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Supplier;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
 
@@ -17,12 +17,12 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Supplier createSupplier(Supplier supplier) {
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
         return supplierRepository.save(supplier);
     }
 
     @Override
-    public Supplier getSupplierById(Long id) {
+    public SupplierProfile getSupplierById(Long id) {
         return supplierRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }

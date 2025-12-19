@@ -1,4 +1,3 @@
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -9,8 +8,11 @@ import com.example.demo.service.DeliveryRecordService;
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    @Autowired
-    DeliveryRecordRepository repo;
+    private final DeliveryRecordRepository repo;
+
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository repo) {
+        this.repo = repo;
+    }
 
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
         return repo.save(delivery);

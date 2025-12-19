@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "supplier_profiles", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "supplierCode")
+@Table(name = "supplier", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "supplierCode")
 })
 public class SupplierProfile {
 
@@ -17,27 +17,21 @@ public class SupplierProfile {
     private String supplierName;
     private String email;
     private String phone;
-
-    private Boolean active = true;
-
+    private boolean active;
     private LocalDateTime createdAt;
 
     public SupplierProfile() {
-        this.active = true;
     }
 
-    public SupplierProfile(String supplierCode, String supplierName,
-                           String email, String phone, Boolean active) {
+    public SupplierProfile(Long id, String supplierCode, String supplierName,
+                    String email, String phone, boolean active, LocalDateTime createdAt) {
+        this.id = id;
         this.supplierCode = supplierCode;
         this.supplierName = supplierName;
         this.email = email;
         this.phone = phone;
-        this.active = (active != null) ? active : true;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.active = active;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {

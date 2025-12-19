@@ -49,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AppUser authenticate(LoginRequest request) {
 
+    // Use getEmail() here
     AppUser user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
@@ -58,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
 
     return user;
     }
+
 
     @Override
     public AppUser findByUsername(String username) {

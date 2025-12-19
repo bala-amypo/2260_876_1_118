@@ -25,10 +25,14 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
 
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() -> new RuntimeException("Invalid supplierId"));
+                .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
-        if (!supplier.isActive()) {
-            throw new RuntimeException("Supplier must be active");
+        if (!supplier.getActive()) {
+            throw new BadRequestException("Supplier must be active");
+        }
+
+        if (po.getQuantity() == null || po.getQuantity() <= 0) {
+            throw new BadRequestException("Quantity must be greater than 0");
         }
 
         return poRepository.save(po);
@@ -40,9 +44,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public PurchaseOrderRecord getPOById(Long id) {
-        return poRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("PO not found"));
+    public Optional<PurchaseOrderRecord> getPOById(Long id) {
+        return poRepository.findById(id);
     }
 
     @Override

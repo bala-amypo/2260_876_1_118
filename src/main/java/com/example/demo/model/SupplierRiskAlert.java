@@ -16,14 +16,15 @@ public class SupplierRiskAlert {
     private String message;
     private LocalDateTime createdAt;
 
-    // ✅ NEW FIELD
+    // 🔴 REQUIRED BY COLLEGE TEST
     private boolean resolved;
 
     public SupplierRiskAlert() {
     }
 
     public SupplierRiskAlert(Long id, Long supplierId, String alertLevel,
-                             String message, LocalDateTime createdAt, boolean resolved) {
+                             String message, LocalDateTime createdAt,
+                             boolean resolved) {
         this.id = id;
         this.supplierId = supplierId;
         this.alertLevel = alertLevel;
@@ -72,11 +73,12 @@ public class SupplierRiskAlert {
         this.createdAt = createdAt;
     }
 
-    // ✅ REQUIRED GETTER & SETTER
-    public boolean isResolved() {
+    // ✅ REQUIRED GETTER
+    public boolean getResolved() {
         return resolved;
     }
 
+    // ✅ REQUIRED SETTER
     public void setResolved(boolean resolved) {
         this.resolved = resolved;
     }

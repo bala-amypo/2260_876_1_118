@@ -29,10 +29,9 @@ public class SupplierProfileController {
 
     // Get supplier by ID
     @GetMapping("/{id}")
-    public ResponseEntity<SupplierProfile> getSupplierById(@PathVariable Long id) {
+    public SupplierProfile getSupplierById(@PathVariable Long id) {
         return supplierService.getSupplierById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     // Get all suppliers

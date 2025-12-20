@@ -24,15 +24,15 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Optional<SupplierProfile> getSupplierById(Long id) {
-        // Return Optional without throwing exception
-        return supplierRepository.findById(id);
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
-    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        // Return Optional without throwing exception
-        return supplierRepository.findBySupplierCode(supplierCode);
+    public SupplierProfile getBySupplierCode(String supplierCode) {
+        return supplierRepository.findBySupplierCode(supplierCode)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override

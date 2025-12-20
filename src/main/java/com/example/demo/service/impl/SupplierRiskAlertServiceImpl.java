@@ -39,4 +39,16 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public List<SupplierRiskAlert> getAllAlerts() {
         return alertRepository.findAll();
     }
+
+    @Override
+    public void raiseDelayAlert(SupplierProfile supplier, long delayDays) {
+
+        SupplierRiskAlert alert = new SupplierRiskAlert();
+        alert.setSupplierId(supplier.getId());
+        alert.setMessage("Delay of " + delayDays + " days detected");
+        alert.setResolved(false);
+
+        alertRepository.save(alert);
+    }
+
 }

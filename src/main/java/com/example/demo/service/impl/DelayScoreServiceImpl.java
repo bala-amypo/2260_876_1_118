@@ -14,7 +14,7 @@ import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
-import com.example.demo.service.impl.SupplierRiskAlertServiceImpl;
+import com.example.demo.service.SupplierRiskAlertService;
 
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
@@ -23,29 +23,15 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierRepository;
-    private final SupplierRiskAlertServiceImpl supplierRiskAlertService;
+    private final SupplierRiskAlertService supplierRiskAlertService;
 
-    // Constructor used in your actual app (without SupplierRiskAlertServiceImpl)
-    public DelayScoreServiceImpl(
-            DelayScoreRecordRepository delayRepository,
-            PurchaseOrderRecordRepository poRepository,
-            DeliveryRecordRepository deliveryRepository,
-            SupplierProfileRepository supplierRepository) {
-
-        this.delayRepository = delayRepository;
-        this.poRepository = poRepository;
-        this.deliveryRepository = deliveryRepository;
-        this.supplierRepository = supplierRepository;
-        this.supplierRiskAlertService = null; // not needed here
-    }
-
-    // ✅ Constructor REQUIRED by hidden test
+    // ✅ SINGLE constructor (Spring will auto-inject)
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayRepository,
             PurchaseOrderRecordRepository poRepository,
             DeliveryRecordRepository deliveryRepository,
             SupplierProfileRepository supplierRepository,
-            SupplierRiskAlertServiceImpl supplierRiskAlertService) {
+            SupplierRiskAlertService supplierRiskAlertService) {
 
         this.delayRepository = delayRepository;
         this.poRepository = poRepository;
@@ -65,7 +51,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new RuntimeException("No deliveries found for PO");
         }
 
-        // ✅ Use Optional to satisfy hidden test
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
@@ -89,6 +74,11 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setDelaySeverity(effectiveDelay > 5 ? "HIGH" : "LOW");
         record.setScore(Math.max(0.0, 100.0 - (effectiveDelay * 5.0)));
         record.setComputedAt(java.time.LocalDateTime.now());
+
+        // optional alert logic
+        if (supplierRiskAlertService != null && effectiveDelay > 5) {
+            supplierRiskAlertService.raiseDelayAlert(supplier, effectiveDelay);
+        }
 
         return delayRepository.save(record);
     }

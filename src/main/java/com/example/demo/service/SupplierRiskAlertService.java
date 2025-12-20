@@ -11,4 +11,6 @@ public interface SupplierRiskAlertService {
     List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId);
 
     List<SupplierRiskAlert> getAllAlerts();
+
+    void raiseDelayAlert(Object supplier, long delayDays);
 }

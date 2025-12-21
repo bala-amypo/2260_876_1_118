@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
-import com.example.demo.model.SupplierProfile;
-
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
@@ -41,16 +39,4 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public List<SupplierRiskAlert> getAllAlerts() {
         return alertRepository.findAll();
     }
-
-    @Override
-    public void raiseDelayAlert(SupplierProfile supplier, long delayDays) {
-
-        SupplierRiskAlert alert = new SupplierRiskAlert();
-        alert.setSupplierId(supplier.getId());
-        alert.setMessage("Delay of " + delayDays + " days detected");
-        alert.setResolved(false);
-
-        alertRepository.save(alert);
-    }
-
 }

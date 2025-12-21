@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -8,13 +9,12 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.model.PurchaseOrderRecord;
-import com.example.demo.model.SupplierProfile;
+import com.example.demo.model.Supplier;
 import com.example.demo.repository.DelayScoreRecordRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
-import com.example.demo.service.SupplierRiskAlertService;
 
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
@@ -23,21 +23,15 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierRepository;
-    private final SupplierRiskAlertService supplierRiskAlertService;
 
-    // ✅ SINGLE constructor (Spring will auto-inject)
-    public DelayScoreServiceImpl(
-            DelayScoreRecordRepository delayRepository,
-            PurchaseOrderRecordRepository poRepository,
-            DeliveryRecordRepository deliveryRepository,
-            SupplierProfileRepository supplierRepository,
-            SupplierRiskAlertService supplierRiskAlertService) {
-
+    public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepository,
+                                 PurchaseOrderRecordRepository poRepository,
+                                 DeliveryRecordRepository deliveryRepository,
+                                 SupplierProfileRepository supplierRepository) {
         this.delayRepository = delayRepository;
         this.poRepository = poRepository;
         this.deliveryRepository = deliveryRepository;
         this.supplierRepository = supplierRepository;
-        this.supplierRiskAlertService = supplierRiskAlertService;
     }
 
     @Override
@@ -48,13 +42,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
-            throw new RuntimeException("No deliveries found for PO");
+            throw new RuntimeException("No deliveries");
         }
 
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
+        Supplier supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
-        if (!supplier.getActive()) {
+        if (!supplier.isActive()) {
             throw new RuntimeException("Inactive supplier");
         }
 
@@ -65,20 +59,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
                 lastDelivery.getActualDeliveryDate()
         );
 
-        long effectiveDelay = Math.max(0, delayDays);
-
         DelayScoreRecord record = new DelayScoreRecord();
         record.setPoId(poId);
         record.setSupplierId(po.getSupplierId());
-        record.setDelayDays((int) effectiveDelay);
-        record.setDelaySeverity(effectiveDelay > 5 ? "HIGH" : "LOW");
-        record.setScore(Math.max(0.0, 100.0 - (effectiveDelay * 5.0)));
+        record.setDelayDays((int) delayDays);
+        record.setDelaySeverity(delayDays > 5 ? "HIGH" : "LOW");
+        record.setScore(Math.max(0, 100 - delayDays * 5));
         record.setComputedAt(java.time.LocalDateTime.now());
-
-        // optional alert logic
-        if (supplierRiskAlertService != null && effectiveDelay > 5) {
-            supplierRiskAlertService.raiseDelayAlert(supplier, effectiveDelay);
-        }
 
         return delayRepository.save(record);
     }

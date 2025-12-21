@@ -18,22 +18,17 @@ public class AppUser {
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     private LocalDateTime createdAt;
 
     public AppUser() {
     }
 
     public AppUser(Long id, String username, String email,
-                   String password, Role role,
-                   LocalDateTime createdAt) {
+                   String password, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
         this.createdAt = createdAt;
     }
 
@@ -67,14 +62,6 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

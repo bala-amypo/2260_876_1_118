@@ -1,17 +1,18 @@
 package com.example.demo.service;
 
 import java.util.List;
-import com.example.demo.model.SupplierProfile;
+
+import com.example.demo.model.Supplier;
 
 public interface SupplierProfileService {
 
-    SupplierProfile createSupplier(SupplierProfile supplier);
+    Supplier createSupplier(Supplier supplier);
 
-    SupplierProfile getSupplierById(Long id);   // ✅ NOT Optional
+    Supplier getSupplierById(Long id);   // Throw "Supplier not found"
 
-    SupplierProfile getBySupplierCode(String supplierCode); // ✅ NOT Optional
+    Supplier getBySupplierCode(String supplierCode);
 
-    List<SupplierProfile> getAllSuppliers();
+    List<Supplier> getAllSuppliers();
 
-    SupplierProfile updateSupplierStatus(Long id, boolean active);
+    Supplier updateSupplierStatus(Long id, boolean active);
 }

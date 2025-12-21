@@ -10,7 +10,7 @@ public interface PurchaseOrderService {
 
     List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
 
-    Optional<PurchaseOrderRecord> getPOById(Long id);
+    PurchaseOrderRecord getPOById(Long id);
 
     List<PurchaseOrderRecord> getAllPurchaseOrders();
 }

@@ -1,4 +1,3 @@
-package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
@@ -7,8 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.service.PurchaseOrderService;
-import com.example.demo.exception.ResourceNotFoundException;
-
 
 @RestController
 @RequestMapping("/api/purchase-orders")
@@ -21,7 +18,7 @@ public class PurchaseOrderController {
         this.poService = poService;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public PurchaseOrderRecord createPO(@RequestBody PurchaseOrderRecord po) {
         return poService.createPurchaseOrder(po);
     }
@@ -33,11 +30,10 @@ public class PurchaseOrderController {
 
     @GetMapping("/{id}")
     public PurchaseOrderRecord getPO(@PathVariable Long id) {
-        return poService.getPOById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Purchase order not found"));
+        return poService.getPOById(id);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<PurchaseOrderRecord> getAllPOs() {
         return poService.getAllPurchaseOrders();
     }

@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +20,7 @@ public class SupplierProfileController {
         this.supplierService = supplierService;
     }
 
-    // Create supplier
+    // Create a new supplier
     @PostMapping("/")
     public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
         return supplierService.createSupplier(supplier);
@@ -29,10 +28,8 @@ public class SupplierProfileController {
 
     // Get supplier by ID
     @GetMapping("/{id}")
-    public ResponseEntity<SupplierProfile> getSupplierById(@PathVariable Long id) {
-        return supplierService.getSupplierById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public SupplierProfile getSupplierById(@PathVariable Long id) {
+        return supplierService.getSupplierById(id);
     }
 
     // Get all suppliers
@@ -41,7 +38,7 @@ public class SupplierProfileController {
         return supplierService.getAllSuppliers();
     }
 
-    // Update supplier status
+    // Update supplier active status
     @PutMapping("/{id}/status")
     public SupplierProfile updateSupplierStatus(@PathVariable Long id,
                                                 @RequestParam boolean active) {
@@ -50,11 +47,7 @@ public class SupplierProfileController {
 
     // Get supplier by supplier code
     @GetMapping("/lookup/{supplierCode}")
-    public ResponseEntity<SupplierProfile> getSupplierByCode(
-            @PathVariable String supplierCode) {
-
-        return supplierService.getBySupplierCode(supplierCode)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public SupplierProfile getSupplierByCode(@PathVariable String supplierCode) {
+        return supplierService.getBySupplierCode(supplierCode);
     }
 }

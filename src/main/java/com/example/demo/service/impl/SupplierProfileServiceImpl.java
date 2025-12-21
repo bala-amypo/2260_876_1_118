@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -37,13 +36,15 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Optional<SupplierProfile> getSupplierById(Long id) {
-        return supplierRepository.findById(id);
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
-    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        return supplierRepository.findBySupplierCode(supplierCode);
+    public SupplierProfile getBySupplierCode(String supplierCode) {
+        return supplierRepository.findBySupplierCode(supplierCode)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
@@ -53,9 +54,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-
+        SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
         return supplierRepository.save(supplier);
     }

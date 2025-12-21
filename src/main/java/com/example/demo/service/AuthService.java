@@ -1,3 +1,8 @@
+package com.example.demo.service;
+
+
+import com.example.demo.model.AppUser;
+
 public interface AuthService {
 
     AppUser registerUser(String username, String email, String password);

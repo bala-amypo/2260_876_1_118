@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.SupplierProfile;
+import com.example.demo.model.Supplier;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
 
@@ -19,42 +19,30 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-
-        // supplierCode must be unique
-        if (supplierRepository.existsBySupplierCode(supplier.getSupplierCode())) {
-            throw new IllegalArgumentException("Supplier code already exists");
-        }
-
-        // active defaults to true
-        supplier.setActive(true);
-
-        // createdAt auto-generated
-        supplier.setCreatedAt(LocalDateTime.now());
-
+    public Supplier createSupplier(Supplier supplier) {
         return supplierRepository.save(supplier);
     }
 
     @Override
-    public SupplierProfile getSupplierById(Long id) {
+    public Supplier getSupplierById(Long id) {
         return supplierRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
-    public SupplierProfile getBySupplierCode(String supplierCode) {
+    public Supplier getBySupplierCode(String supplierCode) {
         return supplierRepository.findBySupplierCode(supplierCode)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
-    public List<SupplierProfile> getAllSuppliers() {
+    public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
 
     @Override
-    public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = getSupplierById(id);
+    public Supplier updateSupplierStatus(Long id, boolean active) {
+        Supplier supplier = getSupplierById(id);
         supplier.setActive(active);
         return supplierRepository.save(supplier);
     }

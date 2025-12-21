@@ -4,35 +4,29 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(
-    name = "purchase_order_records",
-    uniqueConstraints = @UniqueConstraint(columnNames = "poNumber")
-)
+@Table(name = "purchase_order", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "poNumber")
+})
 public class PurchaseOrderRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String poNumber;
-
-    @Column(nullable = false)
     private Long supplierId;
-
     private String itemDescription;
-
-    @Column(nullable = false)
     private Integer quantity;
-
     private LocalDate promisedDeliveryDate;
     private LocalDate issuedDate;
 
-    public PurchaseOrderRecord() {}
+    public PurchaseOrderRecord() {
+    }
 
-    public PurchaseOrderRecord(String poNumber, Long supplierId,
+    public PurchaseOrderRecord(Long id, String poNumber, Long supplierId,
                                String itemDescription, Integer quantity,
                                LocalDate promisedDeliveryDate, LocalDate issuedDate) {
+        this.id = id;
         this.poNumber = poNumber;
         this.supplierId = supplierId;
         this.itemDescription = itemDescription;
@@ -96,5 +90,4 @@ public class PurchaseOrderRecord {
     public void setIssuedDate(LocalDate issuedDate) {
         this.issuedDate = issuedDate;
     }
-
 }

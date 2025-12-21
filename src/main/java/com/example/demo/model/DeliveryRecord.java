@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "delivery")
+@Table(name = "delivery_record")
 public class DeliveryRecord {
 
     @Id

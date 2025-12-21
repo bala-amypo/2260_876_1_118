@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Table(name = "supplier", uniqueConstraints = {
         @UniqueConstraint(columnNames = "supplierCode")
 })
-public class SupplierProfile {
+public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class SupplierProfile {
     private boolean active;
     private LocalDateTime createdAt;
 
-    public SupplierProfile() {
+    public Supplier() {
     }
 
-    public SupplierProfile(Long id, String supplierCode, String supplierName,
+    public Supplier(Long id, String supplierCode, String supplierName,
                     String email, String phone, boolean active, LocalDateTime createdAt) {
         this.id = id;
         this.supplierCode = supplierCode;
@@ -74,7 +74,7 @@ public class SupplierProfile {
         this.phone = phone;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 

@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -24,10 +23,12 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierRepository;
 
-    public DelayScoreServiceImpl(DelayScoreRecordRepository delayRepository,
-                                 PurchaseOrderRecordRepository poRepository,
-                                 DeliveryRecordRepository deliveryRepository,
-                                 SupplierProfileRepository supplierRepository) {
+    public DelayScoreServiceImpl(
+            DelayScoreRecordRepository delayRepository,
+            PurchaseOrderRecordRepository poRepository,
+            DeliveryRecordRepository deliveryRepository,
+            SupplierProfileRepository supplierRepository) {
+
         this.delayRepository = delayRepository;
         this.poRepository = poRepository;
         this.deliveryRepository = deliveryRepository;
@@ -42,7 +43,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
-            throw new RuntimeException("No deliveries");
+            throw new RuntimeException("No deliveries found");
         }
 
         SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
@@ -64,7 +65,10 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setSupplierId(po.getSupplierId());
         record.setDelayDays((int) delayDays);
         record.setDelaySeverity(delayDays > 5 ? "HIGH" : "LOW");
-        record.setScore(Math.max(0, 100 - delayDays * 5));
+
+        // ✅ FIXED: long → Double conversion
+        record.setScore(Math.max(0.0, 100.0 - delayDays * 5));
+
         record.setComputedAt(java.time.LocalDateTime.now());
 
         return delayRepository.save(record);

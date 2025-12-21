@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import java.util.*;
 
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
@@ -9,25 +10,30 @@ import com.example.demo.service.DeliveryRecordService;
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    private final DeliveryRecordRepository repo;
+    private final DeliveryRecordRepository deliveryRepository;
 
-    public DeliveryRecordServiceImpl(DeliveryRecordRepository repo) {
-        this.repo = repo;
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository) {
+        this.deliveryRepository = deliveryRepository;
     }
 
+    @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-        return repo.save(delivery);
+        return deliveryRepository.save(delivery);
     }
 
+    @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return repo.findByPoId(poId);
+        return deliveryRepository.findByPoId(poId);
     }
 
+    @Override
     public DeliveryRecord getDeliveryById(Long id) {
-        return repo.findById(id).orElseThrow();
+        return deliveryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Delivery not found"));
     }
 
+    @Override
     public List<DeliveryRecord> getAllDeliveries() {
-        return repo.findAll();
+        return deliveryRepository.findAll();
     }
 }

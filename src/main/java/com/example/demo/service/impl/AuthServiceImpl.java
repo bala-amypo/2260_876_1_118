@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.service.AuthService;
@@ -24,42 +22,39 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AppUser registerUser(RegisterRequest request) {
+    public AppUser registerUser(String username, String email, String password) {
 
         // username check (hidden test expects this)
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
 
         // email check
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
 
         AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
 
     @Override
-    public AppUser authenticate(LoginRequest request) {
+    public AppUser authenticate(String email, String password) {
 
-    // Use getEmail() here
-    AppUser user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-        throw new RuntimeException("Invalid credentials");
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user;
     }
-
-    return user;
-    }
-
 
     @Override
     public AppUser findByUsername(String username) {

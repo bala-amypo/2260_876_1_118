@@ -14,18 +14,20 @@ public class SupplierRiskAlert {
     private Long supplierId;
     private String alertLevel;
     private String message;
-    private LocalDateTime createdAt;
+    private LocalDateTime alertDate;
+    private Boolean resolved = false;
 
     public SupplierRiskAlert() {
     }
 
     public SupplierRiskAlert(Long id, Long supplierId, String alertLevel,
-                             String message, LocalDateTime createdAt) {
+                             String message, LocalDateTime alertDate, Boolean resolved) {
         this.id = id;
         this.supplierId = supplierId;
         this.alertLevel = alertLevel;
         this.message = message;
-        this.createdAt = createdAt;
+        this.alertDate = alertDate;
+        this.resolved = resolved;
     }
 
     public Long getId() {
@@ -60,11 +62,19 @@ public class SupplierRiskAlert {
         this.message = message;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getAlertDate() {
+        return alertDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setAlertDate(LocalDateTime alertDate) {
+        this.alertDate = alertDate;
+    }
+
+    public Boolean getResolved() {
+        return resolved;
+    }
+
+    public void setResolved(Boolean resolved) {
+        this.resolved = resolved;
     }
 }

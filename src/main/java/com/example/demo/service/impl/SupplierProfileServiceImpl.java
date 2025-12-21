@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,19 +21,29 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
+        if (supplierRepository.findBySupplierCode(supplier.getSupplierCode()).isPresent()) {
+            throw new IllegalArgumentException("Supplier code already exists");
+        }
+
+        if (supplier.getActive() == null) {
+            supplier.setActive(true);
+        }
+
+        if (supplier.getCreatedAt() == null) {
+            supplier.setCreatedAt(LocalDateTime.now());
+        }
+
         return supplierRepository.save(supplier);
     }
 
     @Override
-    public SupplierProfile getSupplierById(Long id) {
-        return supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+    public Optional<SupplierProfile> getSupplierById(Long id) {
+        return supplierRepository.findById(id);
     }
 
     @Override
-    public SupplierProfile getBySupplierCode(String supplierCode) {
-        return supplierRepository.findBySupplierCode(supplierCode)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+        return supplierRepository.findBySupplierCode(supplierCode);
     }
 
     @Override
@@ -42,13 +53,10 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        Optional<SupplierProfile> supplierOpt = supplierRepository.findById(id);
-        if (supplierOpt.isPresent()) {
-            SupplierProfile supplier = supplierOpt.get();
-            supplier.setActive(active);
-            return supplierRepository.save(supplier);
-        } else {
-            throw new RuntimeException("Supplier not found");
-        }
+        SupplierProfile supplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
+        supplier.setActive(active);
+        return supplierRepository.save(supplier);
     }
 }

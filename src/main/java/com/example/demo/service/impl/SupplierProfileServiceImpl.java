@@ -21,17 +21,17 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        if (supplierRepository.findBySupplierCode(supplier.getSupplierCode()).isPresent()) {
+
+        // supplierCode must be unique
+        if (supplierRepository.existsBySupplierCode(supplier.getSupplierCode())) {
             throw new IllegalArgumentException("Supplier code already exists");
         }
 
-        if (supplier.getActive() == null) {
-            supplier.setActive(true);
-        }
+        // active defaults to true (NO null check)
+        supplier.setActive(true);
 
-        if (supplier.getCreatedAt() == null) {
-            supplier.setCreatedAt(LocalDateTime.now());
-        }
+        // createdAt auto-generated
+        supplier.setCreatedAt(LocalDateTime.now());
 
         return supplierRepository.save(supplier);
     }

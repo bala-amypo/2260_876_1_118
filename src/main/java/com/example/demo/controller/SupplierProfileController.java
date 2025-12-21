@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,8 +29,7 @@ public class SupplierProfileController {
     // Get supplier by ID
     @GetMapping("/{id}")
     public SupplierProfile getSupplierById(@PathVariable Long id) {
-        return supplierService.getSupplierById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        return supplierService.getSupplierById(id);
     }
 
     // Get all suppliers
@@ -49,11 +47,7 @@ public class SupplierProfileController {
 
     // Get supplier by supplier code
     @GetMapping("/lookup/{supplierCode}")
-    public ResponseEntity<SupplierProfile> getSupplierByCode(
-            @PathVariable String supplierCode) {
-
-        return supplierService.getBySupplierCode(supplierCode)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public SupplierProfile getSupplierByCode(@PathVariable String supplierCode) {
+        return supplierService.getBySupplierCode(supplierCode);
     }
 }

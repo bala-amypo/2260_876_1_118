@@ -5,9 +5,7 @@ import com.example.demo.model.AppUser;
 
 public interface AuthService {
 
-    AppUser registerUser(String username, String email, String password);
-
-    AppUser authenticate(String email, String password);
+    AppUser registerUser(AppUser user);
 
     AppUser findByUsername(String username);
 

@@ -1,12 +1,10 @@
-package com.example.demo.controller;
-
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.example.demo.model.SupplierProfile;
+import com.example.demo.model.Supplier;
 import com.example.demo.service.SupplierProfileService;
 
 @RestController
@@ -20,34 +18,29 @@ public class SupplierProfileController {
         this.supplierService = supplierService;
     }
 
-    // Create a new supplier
     @PostMapping("/")
-    public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
+    public Supplier createSupplier(@RequestBody Supplier supplier) {
         return supplierService.createSupplier(supplier);
     }
 
-    // Get supplier by ID
     @GetMapping("/{id}")
-    public SupplierProfile getSupplierById(@PathVariable Long id) {
+    public Supplier getSupplier(@PathVariable Long id) {
         return supplierService.getSupplierById(id);
     }
 
-    // Get all suppliers
     @GetMapping("/")
-    public List<SupplierProfile> getAllSuppliers() {
+    public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
-    // Update supplier active status
     @PutMapping("/{id}/status")
-    public SupplierProfile updateSupplierStatus(@PathVariable Long id,
-                                                @RequestParam boolean active) {
+    public Supplier updateStatus(@PathVariable Long id,
+                                 @RequestParam boolean active) {
         return supplierService.updateSupplierStatus(id, active);
     }
 
-    // Get supplier by supplier code
     @GetMapping("/lookup/{supplierCode}")
-    public SupplierProfile getSupplierByCode(@PathVariable String supplierCode) {
+    public Supplier getBySupplierCode(@PathVariable String supplierCode) {
         return supplierService.getBySupplierCode(supplierCode);
     }
 }

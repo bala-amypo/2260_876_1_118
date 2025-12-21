@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.model.PurchaseOrderRecord;
-import com.example.demo.model.Supplier;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.DelayScoreRecordRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
@@ -45,7 +45,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new RuntimeException("No deliveries");
         }
 
-        Supplier supplier = supplierRepository.findById(po.getSupplierId())
+        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
         if (!supplier.isActive()) {

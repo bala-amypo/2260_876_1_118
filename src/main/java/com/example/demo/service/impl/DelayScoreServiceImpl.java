@@ -66,7 +66,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setDelayDays((int) delayDays);
         record.setDelaySeverity(delayDays > 5 ? "HIGH" : "LOW");
 
-        // ✅ FIXED: long → Double conversion
+        
         record.setScore(Math.max(0.0, 100.0 - delayDays * 5));
 
         record.setComputedAt(java.time.LocalDateTime.now());

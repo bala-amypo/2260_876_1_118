@@ -11,7 +11,7 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository repo;
 
-    // Constructor Injection (no @Autowired needed)
+    
     public DeliveryRecordServiceImpl(DeliveryRecordRepository repo) {
         this.repo = repo;
     }

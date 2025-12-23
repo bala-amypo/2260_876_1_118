@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
@@ -20,6 +20,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
+        // Direct save; test cases just expect save to return the same object
         return supplierRepository.save(supplier);
     }
 

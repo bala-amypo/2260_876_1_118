@@ -8,7 +8,7 @@ public interface SupplierProfileService {
 
     SupplierProfile createSupplier(SupplierProfile supplier);
 
-    SupplierProfile getSupplierById(Long id);   
+    SupplierProfile getSupplierById(Long id);
 
     SupplierProfile getBySupplierCode(String supplierCode);
 

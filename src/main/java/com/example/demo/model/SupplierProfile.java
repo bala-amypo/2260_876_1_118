@@ -87,7 +87,7 @@ public class SupplierProfile {
         this.phone = phone;
     }
 
-    // ✅ Important: Boolean getter must be isActive() for test cases
+    // ✅ Boolean getter must be isActive() for test cases
     public boolean isActive() {
         return active;
     }
@@ -104,5 +104,17 @@ public class SupplierProfile {
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
 
-    // Optional: toString(), equals(), hashCode() if needed
+    // Optional: toString(), equals(), hashCode()
+    @Override
+    public String toString() {
+        return "SupplierProfile{" +
+                "id=" + id +
+                ", supplierCode='" + supplierCode + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", active=" + active +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

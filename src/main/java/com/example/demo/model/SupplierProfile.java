@@ -21,5 +21,6 @@ public class SupplierProfile {
     private String supplierCode;
 
     private String email;
+    @Builder.Default
     private Boolean active = true;
 }

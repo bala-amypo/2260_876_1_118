@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,6 @@ import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
-import java.util.Optional;
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
@@ -27,22 +27,21 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-
         if (po == null || po.getSupplierId() == null) {
             throw new BadRequestException("Purchase order or supplierId cannot be null");
         }
 
         // Validate supplier existence
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() ->
-                        new BadRequestException("Invalid supplierId"));
+        Optional<SupplierProfile> supplierOpt = supplierRepository.findById(po.getSupplierId());
+        SupplierProfile supplier = supplierOpt.orElseThrow(() -> 
+            new BadRequestException("Invalid supplierId")
+        );
 
         // Supplier must be active
         if (!supplier.isActive()) {
             throw new BadRequestException("Supplier must be active to create PO");
         }
 
-        // Direct save – expected by test cases
         return poRepository.save(po);
     }
 
@@ -53,7 +52,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public Optional<PurchaseOrderRecord> getPOById(Long id) {
-        return poRepository.findById(id).orElse(null);
+        return poRepository.findById(id);
     }
 
     @Override

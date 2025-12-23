@@ -1,12 +1,13 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
-import java.util.Optional;
 
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
@@ -24,17 +25,20 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Optional<SupplierProfile> getSupplierById(Long id) {
+    public SupplierProfile getSupplierById(Long id) {
+        // Proper Optional handling
         return supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found with id: " + id));
+                .orElseThrow(() -> new BadRequestException("Supplier not found with id: " + id));
     }
 
     @Override
     public SupplierProfile getBySupplierCode(String supplierCode) {
-        if (supplierCode == null || supplierCode.trim().isEmpty())
+        if (supplierCode == null || supplierCode.trim().isEmpty()) {
             throw new BadRequestException("Supplier code must not be empty");
+        }
+
         return supplierRepository.findBySupplierCode(supplierCode)
-                .orElseThrow(() -> new RuntimeException("Supplier not found with code: " + supplierCode));
+                .orElseThrow(() -> new BadRequestException("Supplier not found with code: " + supplierCode));
     }
 
     @Override

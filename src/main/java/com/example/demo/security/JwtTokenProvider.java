@@ -1,6 +1,9 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -10,14 +13,15 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // secret key
+    // Generate a secret key for signing tokens
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+    // Token validity duration (1 hour)
     private final long validityInMilliseconds = 3600000; // 1 hour
 
-    // Generate token
+    // Generate JWT token for a given username
     public String generateToken(String username) {
         Claims claims = Jwts.claims().setSubject(username);
-
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMilliseconds);
 
@@ -29,20 +33,20 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ Validate token (needed for your test case)
+    // Validate the JWT token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-            return true; // valid
+            return true; // valid token
         } catch (JwtException | IllegalArgumentException e) {
             return false; // invalid token
         }
     }
 
-    // Extract username from token
+    // Extract username (subject) from token
     public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

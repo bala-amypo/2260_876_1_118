@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.example.demo.model.AppUser;
 import com.example.demo.service.AuthService;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.exception.BadRequestException;
 
 @RestController
 @RequestMapping("/auth")
@@ -14,9 +16,11 @@ import com.example.demo.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtTokenProvider jwtTokenProvider) {
         this.authService = authService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/register")

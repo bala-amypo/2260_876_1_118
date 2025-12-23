@@ -19,15 +19,20 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        if (alert == null || alert.getSupplierId() == null || alert.getAlertMessage() == null) {
+
+        if (alert == null ||
+            alert.getSupplierId() == null ||
+            alert.getMessage() == null) {
             throw new BadRequestException("Invalid alert details");
         }
+
         alert.setResolved(false);
         return alertRepo.save(alert);
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long id) {
+
         SupplierRiskAlert alert = alertRepo.findById(id)
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
 

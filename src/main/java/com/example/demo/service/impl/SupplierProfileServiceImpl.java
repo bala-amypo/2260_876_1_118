@@ -4,19 +4,17 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     private final SupplierProfileRepository supplierProfileRepository;
-
-    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
-        this.supplierProfileRepository = supplierProfileRepository;
-    }
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
@@ -39,8 +37,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Supplier not found with id: " + id));
+        SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
         return supplierProfileRepository.save(supplier);
     }

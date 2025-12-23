@@ -16,7 +16,10 @@ public class SupplierProfile {
     private Long id;
 
     private String supplierName;
+
+    @Column(unique = true)
     private String supplierCode;
+
     private String email;
-    private Boolean active;
+    private Boolean active = true;
 }

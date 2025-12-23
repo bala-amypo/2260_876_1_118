@@ -4,9 +4,9 @@ import com.example.demo.model.AppUser;
 
 public interface AuthService {
 
-    AppUser registerUser(AppUser user);
+    AppUser findByUsername(String username); // Return AppUser, not Optional
 
-    Optional<AppUser> findByUsername(String username);
+    AppUser register(AppUser user);
 
-    boolean existsByEmail(String email);
+    String login(String username, String password);
 }

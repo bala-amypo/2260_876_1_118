@@ -31,13 +31,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new BadRequestException("Purchase order or supplierId cannot be null");
         }
 
-        // Validate supplier existence
         Optional<SupplierProfile> supplierOpt = supplierRepository.findById(po.getSupplierId());
-        SupplierProfile supplier = supplierOpt.orElseThrow(() -> 
-            new BadRequestException("Invalid supplierId")
-        );
+        SupplierProfile supplier = supplierOpt.orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
-        // Supplier must be active
         if (!supplier.isActive()) {
             throw new BadRequestException("Supplier must be active to create PO");
         }
@@ -51,8 +47,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public Optional<PurchaseOrderRecord> getPOById(Long id) {
-        return poRepository.findById(id);
+    public PurchaseOrderRecord getPOById(Long id) {
+        Optional<PurchaseOrderRecord> poOpt = poRepository.findById(id);
+        return poOpt.orElseThrow(() -> new BadRequestException("Purchase Order not found with id: " + id));
     }
 
     @Override

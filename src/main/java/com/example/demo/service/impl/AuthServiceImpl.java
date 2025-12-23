@@ -22,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AppUser findByUsername(String username) {
-        return userRepository.findByEmail(username)
+        return userRepository.findByUsername(username)
                 .orElse(null);
     }
 

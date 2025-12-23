@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AppUser findByUsername(String username) {
+    public Optional<AppUser> findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElse(null);
     }

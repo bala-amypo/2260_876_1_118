@@ -19,15 +19,22 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
+    public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
+        if (supplierProfile.getSupplierCode() == null || supplierProfile.getSupplierCode().isEmpty()) {
+            throw new BadRequestException("Supplier code cannot be empty");
+        }
+        return supplierProfileRepository.save(supplierProfile);
+    }
+
+    @Override
     public SupplierProfile getSupplierById(Long id) {
         return supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Supplier not found with id: " + id));
     }
 
     @Override
-    public SupplierProfile createSupplier(SupplierProfile supplier) {
-        // Optional: check unique supplier code if required
-        return supplierProfileRepository.save(supplier);
+    public List<SupplierProfile> getAllSuppliers() {
+        return supplierProfileRepository.findAll();
     }
 
     @Override
@@ -39,12 +46,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public List<SupplierProfile> getAllSuppliers() {
-        return supplierProfileRepository.findAll();
-    }
-
-    @Override
-    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        return supplierProfileRepository.findBySupplierCode(supplierCode);
+    public Optional<SupplierProfile> getBySupplierCode(String code) {
+        return supplierProfileRepository.findBySupplierCode(code);
     }
 }

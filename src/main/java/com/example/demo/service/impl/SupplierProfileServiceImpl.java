@@ -25,8 +25,9 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Optional<SupplierProfile> getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id);
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Supplier not found with id " + id));
     }
 
     @Override

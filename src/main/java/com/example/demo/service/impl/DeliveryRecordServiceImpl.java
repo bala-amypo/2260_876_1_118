@@ -39,4 +39,9 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
     public List<DeliveryRecord> getAllDeliveries() {
         return deliveryRepository.findAll();
     }
+
+    @Override
+    public Optional<DeliveryRecord> getDeliveryById(Long id) {
+        return deliveryRepository.findById(id);
+    }
 }

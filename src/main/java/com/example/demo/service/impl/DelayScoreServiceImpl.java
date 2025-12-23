@@ -23,11 +23,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DelayScoreServiceImpl implements DelayScoreService {
 
-    private final DelayScoreRecordRepository delayScoreRepository;
+    private final DelayScoreRecordRepository delayScoreRecordRepository;
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
-    private final SupplierProfileRepository supplierRepository;
+    private final SupplierProfileRepository supplierProfileRepository;
     private final SupplierRiskAlertService riskAlertService;
+
+    public DelayScoreServiceImpl(
+            DelayScoreRecordRepository delayScoreRecordRepository,
+            PurchaseOrderRecordRepository poRepository,
+            DeliveryRecordRepository deliveryRepository,
+            SupplierProfileRepository supplierProfileRepository,
+            SupplierRiskAlertService riskAlertService
+    ) {
+        this.delayScoreRecordRepository = delayScoreRecordRepository;
+        this.poRepository = poRepository;
+        this.deliveryRepository = deliveryRepository;
+        this.supplierProfileRepository = supplierProfileRepository;
+        this.riskAlertService = riskAlertService;
+    }
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {

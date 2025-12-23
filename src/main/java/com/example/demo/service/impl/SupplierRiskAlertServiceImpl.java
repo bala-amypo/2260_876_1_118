@@ -7,6 +7,7 @@ import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
 import com.example.demo.exception.BadRequestException;
+import java.util.Optional;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {

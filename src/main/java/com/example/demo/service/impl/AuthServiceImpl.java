@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.service.AuthService;
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {

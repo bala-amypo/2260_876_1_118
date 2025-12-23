@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.service.PurchaseOrderService;
 
@@ -35,7 +36,8 @@ public class PurchaseOrderController {
     // Get a Purchase Order by its ID
     @GetMapping("/{id}")
     public PurchaseOrderRecord getPO(@PathVariable Long id) {
-        return poService.getPOById(id);
+        return poService.getPOById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PurchaseOrder not found with id " + id));
     }
 
     // Get all Purchase Orders

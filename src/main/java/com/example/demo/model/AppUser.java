@@ -26,9 +26,11 @@ public class AppUser {
     @Column(nullable = false)
     private Role role;
 
+    // Default constructor
     public AppUser() {
     }
 
+    // Constructor with fields
     public AppUser(Long id, String username, String password, String email, Role role) {
         this.id = id;
         this.username = username;
@@ -46,7 +48,8 @@ public class AppUser {
         this.id = id;
     }
 
-    public String getUsername() {  // ✅ needed for test case
+    // ✅ Needed for test cases
+    public String getUsername() {
         return username;
     }
 
@@ -76,5 +79,16 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    // Optional: toString(), equals(), hashCode()
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

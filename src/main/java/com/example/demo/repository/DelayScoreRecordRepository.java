@@ -1,15 +1,19 @@
 package com.example.demo.repository;
+
 import com.example.demo.model.DelayScoreRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
-import java.util.List;
 import org.springframework.stereotype.Repository;
-@Repository
 
+import java.util.List;
+import java.util.Optional;
+
+@Repository
 public interface DelayScoreRecordRepository
         extends JpaRepository<DelayScoreRecord, Long> {
 
+    // One delay score per Purchase Order
     Optional<DelayScoreRecord> findByPoId(Long poId);
 
+    // Used to analyze supplier delay history
     List<DelayScoreRecord> findBySupplierId(Long supplierId);
 }

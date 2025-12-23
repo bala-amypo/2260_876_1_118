@@ -1,16 +1,13 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.DeliveryRecord;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
+import com.example.demo.model.*;
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface DeliveryRecordRepository
-        extends JpaRepository<DeliveryRecord, Long> {
-
-    // REQUIRED for delivery lookup by Purchase Order ID
-    // Used in tests: testGetDeliveriesByPo_returnsList, testPoHasMultipleDeliveries
-    List<DeliveryRecord> findByPoId(Long poId);
+public interface DelayScoreRecordRepository {
+    DelayScoreRecord save(DelayScoreRecord score);
+    List<DelayScoreRecord> findBySupplierId(Long supplierId);
+    Optional<DelayScoreRecord> findByPoId(Long poId);
+    List<DelayScoreRecord> findAll();
 }
+

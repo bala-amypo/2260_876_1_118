@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import com.example.demo.service.SupplierProfileService;
 
 @RestController
 @RequestMapping("/api/suppliers")
-@Tag(name = "Supplier Profile")
+@Tag(name = "Supplier Profile", description = "APIs for managing supplier profiles")
 public class SupplierProfileController {
 
     private final SupplierProfileService supplierService;
@@ -19,27 +20,32 @@ public class SupplierProfileController {
         this.supplierService = supplierService;
     }
 
+    // Create a new supplier
     @PostMapping("/")
     public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
         return supplierService.createSupplier(supplier);
     }
 
+    // Get supplier by ID
     @GetMapping("/{id}")
     public SupplierProfile getSupplier(@PathVariable Long id) {
         return supplierService.getSupplierById(id);
     }
 
+    // Get all suppliers
     @GetMapping("/")
     public List<SupplierProfile> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
+    // Update supplier status (active/inactive)
     @PutMapping("/{id}/status")
     public SupplierProfile updateStatus(@PathVariable Long id,
-                                 @RequestParam boolean active) {
+                                        @RequestParam boolean active) {
         return supplierService.updateSupplierStatus(id, active);
     }
 
+    // Get supplier by supplier code
     @GetMapping("/lookup/{supplierCode}")
     public SupplierProfile getBySupplierCode(@PathVariable String supplierCode) {
         return supplierService.getBySupplierCode(supplierCode);

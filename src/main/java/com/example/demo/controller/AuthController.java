@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.example.demo.model.AppUser;
-import com.example.demo.service.AuthService;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.AppUser;
+import com.example.demo.service.AuthService;
+import com.example.demo.security.JwtTokenProvider;
 
 @RestController
 @RequestMapping("/auth")

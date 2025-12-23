@@ -78,4 +78,17 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     public List<DelayScoreRecord> getAllScores() {
         return delayScoreRepository.findAll();
     }
+
+    @Override
+    public DelayScoreRecord getScoreById(Long id) {
+        return delayScoreRecordRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Score not found for id " + id));
+    }
+
+    @Override
+public DeliveryRecord getDeliveryById(Long id) {
+    return deliveryRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Delivery not found for id " + id));
+}
+
 }

@@ -8,4 +8,6 @@ public interface DelayScoreService {
     DelayScoreRecord computeDelayScore(Long poId);
     List<DelayScoreRecord> getScoresBySupplier(Long supplierId);
     List<DelayScoreRecord> getAllScores();
+    DelayScoreRecord getScoreById(Long id);
+    DeliveryRecord getDeliveryById(Long id);
 }

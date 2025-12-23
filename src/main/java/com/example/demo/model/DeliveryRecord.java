@@ -1,70 +1,27 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "delivery_record")
 public class DeliveryRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long poId;
-    private LocalDate actualDeliveryDate;
     private Integer deliveredQuantity;
-    private String notes;
+    private LocalDate actualDeliveryDate;
 
-    public DeliveryRecord() {
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public DeliveryRecord(Long id, Long poId, LocalDate actualDeliveryDate,
-                          Integer deliveredQuantity, String notes) {
-        this.id = id;
-        this.poId = poId;
-        this.actualDeliveryDate = actualDeliveryDate;
-        this.deliveredQuantity = deliveredQuantity;
-        this.notes = notes;
-    }
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getPoId() {
-        return poId;
-    }
-
-    public void setPoId(Long poId) {
-        this.poId = poId;
-    }
-
-    public LocalDate getActualDeliveryDate() {
-        return actualDeliveryDate;
-    }
-
-    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
-        this.actualDeliveryDate = actualDeliveryDate;
-    }
-
-    public Integer getDeliveredQuantity() {
-        return deliveredQuantity;
-    }
-
+    public Integer getDeliveredQuantity() { return deliveredQuantity; }
     public void setDeliveredQuantity(Integer deliveredQuantity) {
         this.deliveredQuantity = deliveredQuantity;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
+        this.actualDeliveryDate = actualDeliveryDate;
     }
 }

@@ -52,7 +52,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    Optional<PurchaseOrderRecord> getPOById(Long id) {
+    public Optional<PurchaseOrderRecord> getPOById(Long id) {
         return poRepository.findById(id).orElse(null);
     }
 

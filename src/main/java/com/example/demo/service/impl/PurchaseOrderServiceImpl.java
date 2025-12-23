@@ -6,12 +6,10 @@ import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     private final PurchaseOrderRecordRepository poRepository;
@@ -27,11 +25,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
         SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
-
         if (!supplier.getActive()) {
             throw new BadRequestException("Supplier must be active");
         }
-
         return poRepository.save(po);
     }
 
@@ -41,8 +37,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public Optional<PurchaseOrderRecord> getPOById(Long poId) {
-        return poRepository.findById(poId);
+    public Optional<PurchaseOrderRecord> getPOById(Long id) {
+        return poRepository.findById(id);
     }
 
     @Override

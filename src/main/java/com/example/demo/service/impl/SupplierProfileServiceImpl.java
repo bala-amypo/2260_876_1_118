@@ -4,12 +4,10 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     private final SupplierProfileRepository supplierProfileRepository;
@@ -25,13 +23,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public List<SupplierProfile> getAllSuppliers() {
-        return supplierProfileRepository.findAll();
-    }
-
-    @Override
-    public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
-        return supplierProfileRepository.save(supplierProfile);
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        return supplierProfileRepository.save(supplier);
     }
 
     @Override
@@ -39,6 +32,11 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
         SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
         return supplierProfileRepository.save(supplier);
+    }
+
+    @Override
+    public List<SupplierProfile> getAllSuppliers() {
+        return supplierProfileRepository.findAll();
     }
 
     @Override

@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface SupplierProfileService {
     SupplierProfile getSupplierById(Long id);
-    List<SupplierProfile> getAllSuppliers();
-    SupplierProfile createSupplier(SupplierProfile supplierProfile);
+    SupplierProfile createSupplier(SupplierProfile supplier);
     SupplierProfile updateSupplierStatus(Long id, boolean active);
+    List<SupplierProfile> getAllSuppliers();
     Optional<SupplierProfile> getBySupplierCode(String code);
 }

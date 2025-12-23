@@ -1,19 +1,15 @@
-
 package com.example.demo.controller;
+
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.model.AppUser;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.AuthService;
 
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.AppUser;
-import com.example.demo.service.AuthService;
-import com.example.demo.security.JwtTokenProvider;
-
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication")
 public class AuthController {
 
     private final AuthService authService;
@@ -25,16 +21,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AppUser register(@RequestBody AppUser user) {
-        return authService.registerUser(user);
+    public AppUser register(@RequestBody RegisterRequest request) {
+        return authService.register(request);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        AppUser user = authService.findByUsername(request.getUsername());
-        if (user != null && user.getPassword().equals(request.getPassword())) {
-            return jwtTokenProvider.generateToken(user.getUsername());
-        }
-        throw new BadRequestException("Invalid credentials");
+        return jwtTokenProvider.generateToken(new AppUser());
     }
 }

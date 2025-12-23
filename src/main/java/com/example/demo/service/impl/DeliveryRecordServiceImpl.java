@@ -6,12 +6,9 @@ import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.service.DeliveryRecordService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository deliveryRepository;
@@ -28,7 +25,7 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
         PurchaseOrderRecord po = poRepository.findById(delivery.getPoId())
                 .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        if (delivery.getDeliveredQuantity() <= 0) {
+        if (delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >= 0");
         }
 

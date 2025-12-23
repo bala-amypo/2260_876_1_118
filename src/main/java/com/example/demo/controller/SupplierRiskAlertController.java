@@ -1,4 +1,3 @@
-
 package com.example.demo.controller;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import com.example.demo.service.SupplierRiskAlertService;
 
 @RestController
 @RequestMapping("/api/risk-alerts")
-@Tag(name = "Supplier Risk Alerts")
+@Tag(name = "Supplier Risk Alerts", description = "APIs for managing supplier risk alerts")
 public class SupplierRiskAlertController {
 
     private final SupplierRiskAlertService alertService;
@@ -21,21 +20,25 @@ public class SupplierRiskAlertController {
         this.alertService = alertService;
     }
 
+    // Create a new risk alert
     @PostMapping("/")
     public SupplierRiskAlert createAlert(@RequestBody SupplierRiskAlert alert) {
         return alertService.createAlert(alert);
     }
 
+    // Resolve an existing alert
     @PutMapping("/{id}/resolve")
     public SupplierRiskAlert resolveAlert(@PathVariable Long id) {
         return alertService.resolveAlert(id);
     }
 
+    // Get all alerts for a specific supplier
     @GetMapping("/supplier/{supplierId}")
     public List<SupplierRiskAlert> getAlertsBySupplier(@PathVariable Long supplierId) {
         return alertService.getAlertsBySupplier(supplierId);
     }
 
+    // Get a specific alert by ID
     @GetMapping("/{id}")
     public SupplierRiskAlert getAlert(@PathVariable Long id) {
         return alertService.getAllAlerts()
@@ -45,6 +48,7 @@ public class SupplierRiskAlertController {
                 .orElse(null);
     }
 
+    // Get all alerts
     @GetMapping("/")
     public List<SupplierRiskAlert> getAllAlerts() {
         return alertService.getAllAlerts();

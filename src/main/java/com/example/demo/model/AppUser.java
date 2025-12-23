@@ -1,11 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "app_user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
 public class AppUser {
@@ -14,26 +13,31 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
     private String password;
 
-    @ElementCollection
-    private Set<String> roles;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     public AppUser() {
     }
 
-    public AppUser(Long id, String email, String password,
-                   Set<String> roles, LocalDateTime createdAt) {
+    public AppUser(Long id, String username, String password, String email, Role role) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.password = password;
-        this.roles = roles;
-        this.createdAt = createdAt;
+        this.email = email;
+        this.role = role;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -42,12 +46,12 @@ public class AppUser {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {  // ✅ needed for test case
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -58,19 +62,19 @@ public class AppUser {
         this.password = password;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Role getRole() {
+        return role;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

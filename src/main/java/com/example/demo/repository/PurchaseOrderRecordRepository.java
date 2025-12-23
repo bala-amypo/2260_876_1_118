@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface PurchaseOrderRecordRepository extends JpaRepository<PurchaseOrderRecord, Long> {
 
     Optional<PurchaseOrderRecord> findByPoNumber(String poNumber);
-
     List<PurchaseOrderRecord> findBySupplierId(Long supplierId);
-
     boolean existsByPoNumber(String poNumber);
 }

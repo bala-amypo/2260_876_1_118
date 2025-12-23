@@ -4,5 +4,5 @@ public enum Role {
     USER,
     ADMIN,
     ANALYST,
-    MANAGER   // ✅ Added MANAGER to fix test case
+    MANAGER   // ✅ added to match test cases
 }

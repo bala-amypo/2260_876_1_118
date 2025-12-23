@@ -10,9 +10,5 @@ import java.util.Optional;
 public interface SupplierProfileRepository extends JpaRepository<SupplierProfile, Long> {
 
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
-
     boolean existsBySupplierCode(String supplierCode);
-
-    // Remove custom getByIdDirect() returning entity directly
-    // Use standard findById(Long id) that returns Optional<SupplierProfile>
 }

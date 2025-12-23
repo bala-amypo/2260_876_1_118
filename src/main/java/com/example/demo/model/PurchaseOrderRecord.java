@@ -20,8 +20,7 @@ public class PurchaseOrderRecord {
     private LocalDate promisedDeliveryDate;
     private LocalDate issuedDate;
 
-    public PurchaseOrderRecord() {
-    }
+    public PurchaseOrderRecord() {}
 
     public PurchaseOrderRecord(Long id, String poNumber, Long supplierId,
                                String itemDescription, Integer quantity,
@@ -35,59 +34,24 @@ public class PurchaseOrderRecord {
         this.issuedDate = issuedDate;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getPoNumber() { return poNumber; }
+    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
 
-    public String getPoNumber() {
-        return poNumber;
-    }
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
 
-    public void setPoNumber(String poNumber) {
-        this.poNumber = poNumber;
-    }
+    public String getItemDescription() { return itemDescription; }
+    public void setItemDescription(String itemDescription) { this.itemDescription = itemDescription; }
 
-    public Long getSupplierId() {
-        return supplierId;
-    }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
-    }
+    public LocalDate getPromisedDeliveryDate() { return promisedDeliveryDate; }
+    public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) { this.promisedDeliveryDate = promisedDeliveryDate; }
 
-    public String getItemDescription() {
-        return itemDescription;
-    }
-
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public LocalDate getPromisedDeliveryDate() {
-        return promisedDeliveryDate;
-    }
-
-    public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) {
-        this.promisedDeliveryDate = promisedDeliveryDate;
-    }
-
-    public LocalDate getIssuedDate() {
-        return issuedDate;
-    }
-
-    public void setIssuedDate(LocalDate issuedDate) {
-        this.issuedDate = issuedDate;
-    }
+    public LocalDate getIssuedDate() { return issuedDate; }
+    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
 }

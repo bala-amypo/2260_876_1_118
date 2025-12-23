@@ -44,7 +44,6 @@ public class SupplierProfile {
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -60,24 +59,11 @@ public class SupplierProfile {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public boolean isActive() { return active; }
+    public boolean isActive() { return active; }  // ✅ needed by tests
     public void setActive(boolean active) { this.active = active; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { 
-        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now(); 
-    }
-
-    @Override
-    public String toString() {
-        return "SupplierProfile{" +
-                "id=" + id +
-                ", supplierCode='" + supplierCode + '\'' +
-                ", supplierName='" + supplierName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", active=" + active +
-                ", createdAt=" + createdAt +
-                '}';
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
 }

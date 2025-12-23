@@ -4,44 +4,40 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    private final SupplierRiskAlertRepository riskAlertRepository;
-
-    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
-        this.riskAlertRepository = riskAlertRepository;
-    }
+    private final SupplierRiskAlertRepository alertRepository;
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        // Default resolved to false if not set
         if (alert.getResolved() == null) {
-            alert.setResolved(false);
+            alert.setResolved(false); // default unresolved
         }
-        return riskAlertRepository.save(alert);
+        return alertRepository.save(alert);
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
+        SupplierRiskAlert alert = alertRepository.findById(alertId)
                 .orElseThrow(() -> new BadRequestException("Alert not found: " + alertId));
-
         alert.setResolved(true);
-        return riskAlertRepository.save(alert);
-    }
-
-    @Override
-    public List<SupplierRiskAlert> getAllAlerts() {
-        return riskAlertRepository.findAll();
+        return alertRepository.save(alert);
     }
 
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        return riskAlertRepository.findBySupplierId(supplierId);
+        return alertRepository.findBySupplierId(supplierId);
+    }
+
+    @Override
+    public List<SupplierRiskAlert> getAllAlerts() {
+        return alertRepository.findAll();
     }
 }

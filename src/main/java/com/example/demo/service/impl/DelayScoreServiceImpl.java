@@ -86,9 +86,8 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     }
 
     @Override
-public DeliveryRecord getDeliveryById(Long id) {
-    return deliveryRepository.findById(id)
-            .orElseThrow(() -> new BadRequestException("Delivery not found for id " + id));
-}
-
+    public DeliveryRecord getDeliveryById(Long id) {
+        return deliveryRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Delivery not found for id " + id));
+    }
 }

@@ -4,10 +4,12 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     private final SupplierProfileRepository supplierProfileRepository;
@@ -19,17 +21,19 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     @Override
     public SupplierProfile getSupplierById(Long id) {
         return supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Supplier not found"));
+                .orElseThrow(() -> new BadRequestException("Supplier not found with id: " + id));
     }
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
+        // Optional: check unique supplier code if required
         return supplierProfileRepository.save(supplier);
     }
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = getSupplierById(id);
+        SupplierProfile supplier = supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Supplier not found with id: " + id));
         supplier.setActive(active);
         return supplierProfileRepository.save(supplier);
     }
@@ -40,7 +44,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return supplierProfileRepository.findBySupplierCode(code);
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+        return supplierProfileRepository.findBySupplierCode(supplierCode);
     }
 }

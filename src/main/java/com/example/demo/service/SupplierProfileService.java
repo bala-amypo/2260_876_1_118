@@ -10,5 +10,5 @@ public interface SupplierProfileService {
     SupplierProfile createSupplier(SupplierProfile supplier);
     SupplierProfile updateSupplierStatus(Long id, boolean active);
     List<SupplierProfile> getAllSuppliers();
-    Optional<SupplierProfile> getBySupplierCode(String code);
+    Optional<SupplierProfile> getBySupplierCode(String supplierCode);
 }

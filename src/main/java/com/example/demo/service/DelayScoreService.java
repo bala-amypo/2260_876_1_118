@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.DelayScoreRecord;
+import com.example.demo.model.DeliveryRecord;
+import com.example.demo.model.DelayScoreRecord;
+
 
 import java.util.List;
 

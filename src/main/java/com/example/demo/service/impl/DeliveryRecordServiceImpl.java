@@ -1,46 +1,47 @@
 package com.example.demo.service.impl;
 
-import org.springframework.stereotype.Service;
-import java.util.List;
-
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.DeliveryRecord;
+import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.service.DeliveryRecordService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    private final DeliveryRecordRepository repo;
+    private final DeliveryRecordRepository deliveryRepository;
+    private final PurchaseOrderRecordRepository poRepository;
 
-    public DeliveryRecordServiceImpl(DeliveryRecordRepository repo) {
-        this.repo = repo;
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository,
+                                     PurchaseOrderRecordRepository poRepository) {
+        this.deliveryRepository = deliveryRepository;
+        this.poRepository = poRepository;
     }
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
+        PurchaseOrderRecord po = poRepository.findById(delivery.getPoId())
+                .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
-        // Direct save as expected by test cases
-        return repo.save(delivery);
+        if (delivery.getDeliveredQuantity() <= 0) {
+            throw new BadRequestException("Delivered quantity must be >= 0");
+        }
+
+        return deliveryRepository.save(delivery);
     }
 
     @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-
-        return repo.findByPoId(poId);
-    }
-
-    @Override
-    public DeliveryRecord getDeliveryById(Long id) {
-
-        return repo.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Delivery record not found with id: " + id));
+        return deliveryRepository.findByPoId(poId);
     }
 
     @Override
     public List<DeliveryRecord> getAllDeliveries() {
-
-        return repo.findAll();
+        return deliveryRepository.findAll();
     }
 }

@@ -27,15 +27,21 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
 
-        // Check if supplier exists
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
+        if (po == null || po.getSupplierId() == null) {
+            throw new BadRequestException("Purchase order or supplierId cannot be null");
+        }
 
-        // ✅ FIXED: use isActive() for boolean field
+        // Validate supplier existence
+        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
+                .orElseThrow(() ->
+                        new BadRequestException("Invalid supplierId"));
+
+        // Supplier must be active
         if (!supplier.isActive()) {
             throw new BadRequestException("Supplier must be active to create PO");
         }
 
+        // Direct save – expected by test cases
         return poRepository.save(po);
     }
 

@@ -26,6 +26,7 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
             throw new BadRequestException("Invalid alert details");
         }
 
+        // Alerts are unresolved by default
         alert.setResolved(false);
         return alertRepo.save(alert);
     }
@@ -34,7 +35,8 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public SupplierRiskAlert resolveAlert(Long id) {
 
         SupplierRiskAlert alert = alertRepo.findById(id)
-                .orElseThrow(() -> new BadRequestException("Alert not found"));
+                .orElseThrow(() ->
+                        new BadRequestException("Alert not found"));
 
         alert.setResolved(true);
         return alertRepo.save(alert);

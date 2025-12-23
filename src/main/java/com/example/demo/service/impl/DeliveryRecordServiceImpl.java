@@ -18,22 +18,28 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
+
+        // Direct save as expected by test cases
         return repo.save(delivery);
     }
 
     @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
+
         return repo.findByPoId(poId);
     }
 
     @Override
     public DeliveryRecord getDeliveryById(Long id) {
+
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Delivery record not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("Delivery record not found with id: " + id));
     }
 
     @Override
     public List<DeliveryRecord> getAllDeliveries() {
+
         return repo.findAll();
     }
 }

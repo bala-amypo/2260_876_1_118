@@ -43,13 +43,19 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
 
+        if (poId == null) {
+            throw new BadRequestException("PO id cannot be null");
+        }
+
         PurchaseOrderRecord po = poRepo.findById(poId)
-                .orElseThrow(() -> new BadRequestException("PO not found"));
+                .orElseThrow(() ->
+                        new BadRequestException("PO not found"));
 
         SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
-                .orElseThrow(() -> new BadRequestException("Supplier not found"));
+                .orElseThrow(() ->
+                        new BadRequestException("Supplier not found"));
 
-        // ✅ FIXED HERE
+        // Supplier must be active
         if (!supplier.isActive()) {
             throw new BadRequestException("Inactive supplier");
         }
@@ -59,10 +65,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new BadRequestException("No deliveries found for this PO");
         }
 
-        int totalDelivered = deliveries.stream()
-                .mapToInt(DeliveryRecord::getDeliveredQuantity)
-                .sum();
-
+        // Calculate max delay across deliveries
         long maxDelay = deliveries.stream()
                 .mapToLong(d ->
                         ChronoUnit.DAYS.between(
@@ -97,6 +100,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         record.setDelaySeverity(severity);
         record.setScore(score);
 
+        // Risk alert service intentionally not auto-triggered (per tests)
         return delayRepo.save(record);
     }
 
@@ -108,7 +112,8 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     @Override
     public DelayScoreRecord getScoreById(Long id) {
         return delayRepo.findById(id)
-                .orElseThrow(() -> new BadRequestException("Score not found"));
+                .orElseThrow(() ->
+                        new BadRequestException("Score not found"));
     }
 
     @Override

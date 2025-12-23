@@ -17,5 +17,6 @@ public class SupplierRiskAlert {
 
     private Long supplierId;
     private String alertLevel; // HIGH, MEDIUM, LOW
+    @Builder.Default
     private Boolean resolved = false;
 }

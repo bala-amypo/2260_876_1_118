@@ -8,9 +8,9 @@ import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 public class AuthServiceImpl implements AuthService {
 
@@ -44,13 +44,17 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
 
-        AppUser saved = userRepository.save(user);
-        return saved;
+        return userRepository.save(user);
     }
 
     @Override
-    public Optional<AppUser> login(LoginRequest request) {
-        // In your tests, actual AuthenticationManager behavior is mocked
-        return Optional.of(new AppUser()); // Dummy object for tests
+    public String login(LoginRequest request) {
+        // Authenticate user
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+
+        AppUser user = (AppUser) auth.getPrincipal(); // usually returns AppUser
+        return jwtTokenProvider.generateToken(user);
     }
 }

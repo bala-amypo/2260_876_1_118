@@ -25,11 +25,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AppUser user) {
-        AppUser existingUser = authService.findByUsername(user.getEmail());
-        if (existingUser != null) {
-            return "Login successful";
+    public String login(@RequestBody LoginRequest request) {
+        AppUser user = authService.findByUsername(request.getUsername());
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+            return jwtTokenProvider.generateToken(user.getUsername());
         }
-        return "Invalid credentials";
+        throw new BadRequestException("Invalid credentials");
     }
 }

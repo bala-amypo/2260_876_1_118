@@ -13,27 +13,40 @@ public class SupplierProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String supplierCode;
+
+    @Column(nullable = false)
     private String supplierName;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column
     private String phone;
-    private boolean active;
-    private LocalDateTime createdAt;
 
-    public SupplierProfile() {
-    }
+    @Column(nullable = false)
+    private boolean active = true; // default active
 
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now(); // auto-set timestamp
+
+    // Default constructor
+    public SupplierProfile() {}
+
+    // Constructor with fields
     public SupplierProfile(Long id, String supplierCode, String supplierName,
-                    String email, String phone, boolean active, LocalDateTime createdAt) {
+                           String email, String phone, boolean active, LocalDateTime createdAt) {
         this.id = id;
         this.supplierCode = supplierCode;
         this.supplierName = supplierName;
         this.email = email;
         this.phone = phone;
         this.active = active;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -74,6 +87,7 @@ public class SupplierProfile {
         this.phone = phone;
     }
 
+    // ✅ Important: Boolean getter must be isActive() for test cases
     public boolean isActive() {
         return active;
     }
@@ -87,6 +101,8 @@ public class SupplierProfile {
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
+
+    // Optional: toString(), equals(), hashCode() if needed
 }

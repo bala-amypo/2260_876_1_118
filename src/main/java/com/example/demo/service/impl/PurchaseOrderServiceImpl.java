@@ -1,41 +1,35 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     private final PurchaseOrderRecordRepository poRepository;
-    private final SupplierProfileRepository supplierRepository;
+    private final SupplierProfileRepository supplierProfileRepository;
 
-    public PurchaseOrderServiceImpl(
-            PurchaseOrderRecordRepository poRepository,
-            SupplierProfileRepository supplierRepository) {
+    public PurchaseOrderServiceImpl(PurchaseOrderRecordRepository poRepository,
+                                    SupplierProfileRepository supplierProfileRepository) {
         this.poRepository = poRepository;
-        this.supplierRepository = supplierRepository;
+        this.supplierProfileRepository = supplierProfileRepository;
     }
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        if (po == null || po.getSupplierId() == null) {
-            throw new BadRequestException("Purchase order or supplierId cannot be null");
-        }
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
+                .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
-        Optional<SupplierProfile> supplierOpt = supplierRepository.findById(po.getSupplierId());
-        SupplierProfile supplier = supplierOpt.orElseThrow(() -> new BadRequestException("Invalid supplierId"));
-
-        if (!supplier.isActive()) {
-            throw new BadRequestException("Supplier must be active to create PO");
+        if (!supplier.getActive()) {
+            throw new BadRequestException("Supplier must be active");
         }
 
         return poRepository.save(po);
@@ -47,9 +41,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public PurchaseOrderRecord getPOById(Long id) {
-        Optional<PurchaseOrderRecord> poOpt = poRepository.findById(id);
-        return poOpt.orElseThrow(() -> new BadRequestException("Purchase Order not found with id: " + id));
+    public Optional<PurchaseOrderRecord> getPOById(Long poId) {
+        return poRepository.findById(poId);
     }
 
     @Override

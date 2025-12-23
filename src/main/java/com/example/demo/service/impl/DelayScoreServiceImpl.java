@@ -31,8 +31,8 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             PurchaseOrderRecordRepository poRepo,
             DeliveryRecordRepository deliveryRepo,
             SupplierProfileRepository supplierRepo,
-            SupplierRiskAlertService riskAlertService
-    ) {
+            SupplierRiskAlertService riskAlertService) {
+
         this.delayRepo = delayRepo;
         this.poRepo = poRepo;
         this.deliveryRepo = deliveryRepo;
@@ -42,13 +42,15 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
+
         PurchaseOrderRecord po = poRepo.findById(poId)
                 .orElseThrow(() -> new BadRequestException("PO not found"));
 
         SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Supplier not found"));
 
-        if (!supplier.getActive()) {
+        // ✅ FIXED HERE
+        if (!supplier.isActive()) {
             throw new BadRequestException("Inactive supplier");
         }
 
@@ -62,7 +64,12 @@ public class DelayScoreServiceImpl implements DelayScoreService {
                 .sum();
 
         long maxDelay = deliveries.stream()
-                .mapToLong(d -> ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), d.getActualDeliveryDate()))
+                .mapToLong(d ->
+                        ChronoUnit.DAYS.between(
+                                po.getPromisedDeliveryDate(),
+                                d.getActualDeliveryDate()
+                        )
+                )
                 .max()
                 .orElse(0);
 

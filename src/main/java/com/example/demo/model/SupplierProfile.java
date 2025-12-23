@@ -26,15 +26,13 @@ public class SupplierProfile {
     private String phone;
 
     @Column(nullable = false)
-    private boolean active = true; // default active
+    private boolean active = true;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // auto-set timestamp
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Default constructor
     public SupplierProfile() {}
 
-    // Constructor with fields
     public SupplierProfile(Long id, String supplierCode, String supplierName,
                            String email, String phone, boolean active, LocalDateTime createdAt) {
         this.id = id;
@@ -47,64 +45,29 @@ public class SupplierProfile {
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getSupplierCode() { return supplierCode; }
+    public void setSupplierCode(String supplierCode) { this.supplierCode = supplierCode; }
+
+    public String getSupplierName() { return supplierName; }
+    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { 
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now(); 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSupplierCode() {
-        return supplierCode;
-    }
-
-    public void setSupplierCode(String supplierCode) {
-        this.supplierCode = supplierCode;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    // ✅ Boolean getter must be isActive() for test cases
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
-    }
-
-    // Optional: toString(), equals(), hashCode()
     @Override
     public String toString() {
         return "SupplierProfile{" +

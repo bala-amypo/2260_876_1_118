@@ -10,13 +10,13 @@ import java.util.Optional;
 @Repository
 public interface SupplierProfileRepository extends JpaRepository<SupplierProfile, Long> {
 
-    // Find by supplier code (used in tests)
+    // ✅ Find by supplier code (used in tests)
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
 
-    // Check existence by supplier code
+    // ✅ Check existence by supplier code
     boolean existsBySupplierCode(String supplierCode);
 
-    // Custom method: return entity directly (matches test expectations)
+    // ✅ Custom method to return entity directly (avoids Optional issues in tests)
     @Query("SELECT s FROM SupplierProfile s WHERE s.id = :id")
     SupplierProfile getByIdDirect(Long id);
 }

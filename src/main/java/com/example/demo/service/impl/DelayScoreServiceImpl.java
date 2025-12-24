@@ -12,12 +12,10 @@ import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
 import com.example.demo.service.SupplierRiskAlertService;
-import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@Service
 public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository delayRepo;
@@ -71,13 +69,12 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
         double score = Math.max(0, 100 - delayDays * 5);
 
-        DelayScoreRecord record = DelayScoreRecord.builder()
-                .poId(poId)
-                .supplierId(supplier.getId())
-                .delayDays(delayDays)
-                .delaySeverity(severity)
-                .score(score)
-                .build();
+        DelayScoreRecord record = new DelayScoreRecord();
+        record.setPoId(poId);
+        record.setSupplierId(supplier.getId());
+        record.setDelayDays(delayDays);
+        record.setDelaySeverity(severity);
+        record.setScore(score);
 
         return delayRepo.save(record);
     }

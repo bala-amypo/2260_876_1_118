@@ -1,33 +1,32 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     private final SupplierProfileRepository supplierProfileRepository;
 
+    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
+        this.supplierProfileRepository = supplierProfileRepository;
+    }
+
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
-        if (supplierProfile.getSupplierCode() == null || supplierProfile.getSupplierCode().isEmpty()) {
-            throw new BadRequestException("Supplier code cannot be empty");
-        }
         return supplierProfileRepository.save(supplierProfile);
     }
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
         return supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Supplier not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override

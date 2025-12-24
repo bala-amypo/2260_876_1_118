@@ -15,12 +15,10 @@ public class SupplierProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String supplierName;
-
-    @Column(unique = true)
     private String supplierCode;
-
+    private String supplierName;
     private String email;
+
     @Builder.Default
     private Boolean active = true;
 }

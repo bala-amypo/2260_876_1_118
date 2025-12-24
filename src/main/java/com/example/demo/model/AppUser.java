@@ -15,9 +15,9 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String username;   // used in tests
+    private String email;      // used in JWT tests
     private String password;
-    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role;

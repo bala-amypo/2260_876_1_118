@@ -17,8 +17,8 @@ public class PurchaseOrderRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long supplierId;
     private String poNumber;
+    private Long supplierId;
     private Integer quantity;
     private LocalDate issuedDate;
     private LocalDate promisedDeliveryDate;

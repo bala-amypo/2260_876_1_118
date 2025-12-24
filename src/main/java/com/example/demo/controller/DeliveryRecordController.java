@@ -1,46 +1,33 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.service.DeliveryRecordService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveries")
-@Tag(name = "Delivery Records", description = "APIs for managing delivery records")
 public class DeliveryRecordController {
 
-    private final DeliveryRecordService deliveryService;
+    private final DeliveryRecordService deliveryRecordService;
 
-    public DeliveryRecordController(DeliveryRecordService deliveryService) {
-        this.deliveryService = deliveryService;
+    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
+        this.deliveryRecordService = deliveryRecordService;
     }
 
-    // Record a new delivery
-    @PostMapping("/")
-    public DeliveryRecord recordDelivery(@RequestBody DeliveryRecord delivery) {
-        return deliveryService.recordDelivery(delivery);
+    @PostMapping
+    public DeliveryRecord record(@RequestBody DeliveryRecord delivery) {
+        return deliveryRecordService.recordDelivery(delivery);
     }
 
-    // Get all deliveries for a specific PO
     @GetMapping("/po/{poId}")
-    public List<DeliveryRecord> getByPO(@PathVariable Long poId) {
-        return deliveryService.getDeliveriesByPO(poId);
+    public List<DeliveryRecord> getByPo(@PathVariable Long poId) {
+        return deliveryRecordService.getDeliveriesByPO(poId);
     }
 
-    // Get a delivery record by its ID
-    @GetMapping("/{id}")
-    public DeliveryRecord getDelivery(@PathVariable Long id) {
-        return deliveryService.getDeliveryById(id);
-    }
-
-    // Get all delivery records
-    @GetMapping("/")
-    public List<DeliveryRecord> getAllDeliveries() {
-        return deliveryService.getAllDeliveries();
+    @GetMapping
+    public List<DeliveryRecord> getAll() {
+        return deliveryRecordService.getAllDeliveries();
     }
 }

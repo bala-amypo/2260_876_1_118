@@ -1,48 +1,39 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.service.PurchaseOrderService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/purchase-orders")
-@Tag(name = "Purchase Orders", description = "APIs for managing purchase orders")
 public class PurchaseOrderController {
 
-    private final PurchaseOrderService poService;
+    private final PurchaseOrderService purchaseOrderService;
 
-    public PurchaseOrderController(PurchaseOrderService poService) {
-        this.poService = poService;
+    public PurchaseOrderController(PurchaseOrderService purchaseOrderService) {
+        this.purchaseOrderService = purchaseOrderService;
     }
 
-    // Create a new Purchase Order
-    @PostMapping("/")
-    public PurchaseOrderRecord createPO(@RequestBody PurchaseOrderRecord po) {
-        return poService.createPurchaseOrder(po);
+    @PostMapping
+    public PurchaseOrderRecord create(@RequestBody PurchaseOrderRecord po) {
+        return purchaseOrderService.createPurchaseOrder(po);
     }
 
-    // Get all POs for a specific supplier
+    @GetMapping("/{id}")
+    public Optional<PurchaseOrderRecord> getById(@PathVariable Long id) {
+        return purchaseOrderService.getPOById(id);
+    }
+
     @GetMapping("/supplier/{supplierId}")
     public List<PurchaseOrderRecord> getBySupplier(@PathVariable Long supplierId) {
-        return poService.getPOsBySupplier(supplierId);
+        return purchaseOrderService.getPOsBySupplier(supplierId);
     }
 
-    // Get a Purchase Order by its ID
-    @GetMapping("/{id}")
-    public PurchaseOrderRecord getPO(@PathVariable Long id) {
-        return poService.getPOById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PurchaseOrder not found with id " + id));
-    }
-
-    // Get all Purchase Orders
-    @GetMapping("/")
-    public List<PurchaseOrderRecord> getAllPOs() {
-        return poService.getAllPurchaseOrders();
+    @GetMapping
+    public List<PurchaseOrderRecord> getAll() {
+        return purchaseOrderService.getAllPurchaseOrders();
     }
 }

@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class JwtResponse {
-    private String token;
+public class ApiResponse {
+
+    private boolean success;
+    private String message;
+    private Object data;
 }

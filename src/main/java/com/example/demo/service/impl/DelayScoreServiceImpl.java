@@ -50,7 +50,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         PurchaseOrderRecord po = poRepository.findById(poId)
                 .orElseThrow(() -> new BadRequestException("PO not found: " + poId));
 
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Supplier not found for PO: " + poId));
 
         if (!supplier.getActive()) {

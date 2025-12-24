@@ -18,9 +18,11 @@ import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+
 public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository delayScoreRecordRepository;

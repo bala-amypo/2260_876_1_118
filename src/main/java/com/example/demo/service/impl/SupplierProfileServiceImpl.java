@@ -10,38 +10,38 @@ import java.util.Optional;
 
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
-    private final SupplierProfileRepository repository;
+    private final SupplierProfileRepository supplierProfileRepository;
 
-    public SupplierProfileServiceImpl(SupplierProfileRepository repository) {
-        this.repository = repository;
+    public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
+        this.supplierProfileRepository = supplierProfileRepository;
     }
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        return repository.save(supplier);
+        return supplierProfileRepository.save(supplier);
     }
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return repository.findById(id)
+        return supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {
-        return repository.findAll();
+        return supplierProfileRepository.findAll();
     }
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = repository.findById(id)
+        SupplierProfile supplier = supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
         supplier.setActive(active);
-        return repository.save(supplier);
+        return supplierProfileRepository.save(supplier);
     }
 
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String code) {
-        return repository.findBySupplierCode(code);
+        return supplierProfileRepository.findBySupplierCode(code);
     }
 }

@@ -19,8 +19,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public SupplierProfile createSupplier(SupplierProfile supplierProfile) {
-        return supplierProfileRepository.save(supplierProfile);
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        return supplierProfileRepository.save(supplier);
     }
 
     @Override
@@ -36,7 +36,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = getSupplierById(id);
+        SupplierProfile supplier = supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
         supplier.setActive(active);
         return supplierProfileRepository.save(supplier);
     }

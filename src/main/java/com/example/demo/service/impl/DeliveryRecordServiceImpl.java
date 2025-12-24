@@ -35,5 +35,7 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
     }
 
     @Override
-    public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return deliveryReposit
+    public List<DeliveryRecord> getAllDeliveries() {
+        return deliveryRepository.findAll();
+    }
+}

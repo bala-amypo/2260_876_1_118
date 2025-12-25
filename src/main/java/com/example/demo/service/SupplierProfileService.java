@@ -9,11 +9,11 @@ public interface SupplierProfileService {
 
     SupplierProfile createSupplier(SupplierProfile supplier);
 
-    // 🔴 Tests expect Optional here
-    Optional<SupplierProfile> getSupplierById(Long id);
+    // 🔴 MUST return entity (line 89)
+    SupplierProfile getSupplierById(Long id);
 
-    // 🔴 Tests expect DIRECT object here
-    SupplierProfile getBySupplierCode(String supplierCode);
+    // 🔴 MUST return Optional (lines 147, 156)
+    Optional<SupplierProfile> getBySupplierCode(String supplierCode);
 
     List<SupplierProfile> getAllSuppliers();
 

@@ -8,20 +8,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SupplierProfileRepository extends JpaRepository<SupplierProfile, Long> {
+public interface SupplierProfileRepository
+        extends JpaRepository<SupplierProfile, Long> {
 
-    // 🔴 Exact lookup (case-insensitive)
-    Optional<SupplierProfile> findBySupplierCodeIgnoreCase(String supplierCode);
-
-    // 🔴 Required for backward compatibility
+    // ✅ PRIMARY lookup used by tests
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
 
-    // 🔴 Active suppliers only
+    // ✅ Case-insensitive lookup (criteria tests)
+    Optional<SupplierProfile> findBySupplierCodeIgnoreCase(String supplierCode);
+
+    // ✅ Active suppliers filter
     List<SupplierProfile> findByActiveTrue();
 
-    // 🔴 Email present criteria
+    // ✅ Email present filter
     List<SupplierProfile> findByEmailIsNotNull();
 
-    // 🔴 Supplier code pattern
-    List<SupplierProfile> findBySupplierCodeContaining(String pattern);
+    // ✅ Supplier code LIKE / pattern match
+    List<SupplierProfile> findBySupplierCodeContainingIgnoreCase(String pattern);
 }

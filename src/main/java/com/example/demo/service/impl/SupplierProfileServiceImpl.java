@@ -36,17 +36,15 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public SupplierProfile getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+    return supplierProfileRepository.findBySupplierCodeIgnoreCase(supplierCode);
     }
 
-    // 🔴 Tests expect NON-OPTIONAL return
     @Override
-    public SupplierProfile getBySupplierCode(String supplierCode) {
-        return supplierProfileRepository.findBySupplierCode(supplierCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+    public Optional<SupplierProfile> getSupplierById(Long id) {
+    return supplierProfileRepository.findById(id);
     }
+
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {

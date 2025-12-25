@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.PurchaseOrderRecord;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PurchaseOrderService {
 
@@ -10,8 +11,8 @@ public interface PurchaseOrderService {
 
     List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
 
-    // 🔴 MUST NOT be Optional
-    PurchaseOrderRecord getPOById(Long id);
+    // 🔴 MUST be Optional (tests expect it)
+    Optional<PurchaseOrderRecord> getPOById(Long id);
 
     List<PurchaseOrderRecord> getAllPurchaseOrders();
 }

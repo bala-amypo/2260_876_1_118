@@ -2,37 +2,45 @@ package com.example.demo.controller;
 
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.service.SupplierRiskAlertService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/risk-alerts")
+@Tag(name = "Risk Alerts")
 public class SupplierRiskAlertController {
 
-    private final SupplierRiskAlertService riskAlertService;
+    private final SupplierRiskAlertService supplierRiskAlertService;
 
-    public SupplierRiskAlertController(SupplierRiskAlertService riskAlertService) {
-        this.riskAlertService = riskAlertService;
+    public SupplierRiskAlertController(SupplierRiskAlertService supplierRiskAlertService) {
+        this.supplierRiskAlertService = supplierRiskAlertService;
     }
 
     @PostMapping
-    public SupplierRiskAlert create(@RequestBody SupplierRiskAlert alert) {
-        return riskAlertService.createAlert(alert);
-    }
-
-    @PutMapping("/{id}/resolve")
-    public SupplierRiskAlert resolve(@PathVariable Long id) {
-        return riskAlertService.resolveAlert(id);
+    @Operation(summary = "Create risk alert")
+    public ResponseEntity<SupplierRiskAlert> create(@RequestBody SupplierRiskAlert alert) {
+        return ResponseEntity.ok(supplierRiskAlertService.createAlert(alert));
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public List<SupplierRiskAlert> getBySupplier(@PathVariable Long supplierId) {
-        return riskAlertService.getAlertsBySupplier(supplierId);
+    @Operation(summary = "Get alerts by supplier")
+    public ResponseEntity<List<SupplierRiskAlert>> getBySupplier(@PathVariable Long supplierId) {
+        return ResponseEntity.ok(supplierRiskAlertService.getAlertsBySupplier(supplierId));
+    }
+
+    @PutMapping("/{id}/resolve")
+    @Operation(summary = "Resolve an alert")
+    public ResponseEntity<SupplierRiskAlert> resolve(@PathVariable Long id) {
+        return ResponseEntity.ok(supplierRiskAlertService.resolveAlert(id));
     }
 
     @GetMapping
-    public List<SupplierRiskAlert> getAll() {
-        return riskAlertService.getAllAlerts();
+    @Operation(summary = "List all alerts")
+    public ResponseEntity<List<SupplierRiskAlert>> list() {
+        return ResponseEntity.ok(supplierRiskAlertService.getAllAlerts());
     }
 }

@@ -13,7 +13,6 @@ import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
     private final AppUserRepository appUserRepository;
 
     public CustomUserDetailsService(AppUserRepository appUserRepository) {

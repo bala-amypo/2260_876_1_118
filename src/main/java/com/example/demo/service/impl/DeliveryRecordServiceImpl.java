@@ -11,20 +11,18 @@ import java.util.List;
 
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
-
     private final DeliveryRecordRepository deliveryRepository;
     private final PurchaseOrderRecordRepository poRepository;
 
     public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository, 
-                                   PurchaseOrderRecordRepository poRepository) {
+                                    PurchaseOrderRecordRepository poRepository) {
         this.deliveryRepository = deliveryRepository;
         this.poRepository = poRepository;
     }
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-        Long poId = delivery.getPoId();
-        if (poId == null || !poRepository.existsById(poId)) {
+        if (!poRepository.existsById(delivery.getPoId())) {
             throw new BadRequestException("Invalid PO id");
         }
 

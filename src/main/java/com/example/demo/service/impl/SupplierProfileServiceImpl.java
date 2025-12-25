@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-
     private final SupplierProfileRepository supplierProfileRepository;
 
     public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
@@ -28,9 +27,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        if (id == null) {
-            throw new ResourceNotFoundException("Supplier not found");
-        }
         return supplierProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }

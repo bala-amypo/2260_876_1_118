@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
-
     private final DelayScoreRecordRepository delayScoreRecordRepository;
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
@@ -21,10 +20,10 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final SupplierRiskAlertService riskAlertService;
 
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayScoreRecordRepository,
-                               PurchaseOrderRecordRepository poRepository,
-                               DeliveryRecordRepository deliveryRepository,
-                               SupplierProfileRepository supplierRepository,
-                               SupplierRiskAlertService riskAlertService) {
+                                PurchaseOrderRecordRepository poRepository,
+                                DeliveryRecordRepository deliveryRepository,
+                                SupplierProfileRepository supplierRepository,
+                                SupplierRiskAlertService riskAlertService) {
         this.delayScoreRecordRepository = delayScoreRecordRepository;
         this.poRepository = poRepository;
         this.deliveryRepository = deliveryRepository;
@@ -34,19 +33,10 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        if (poId == null) {
-            throw new ResourceNotFoundException("Purchase order not found");
-        }
-        
         PurchaseOrderRecord po = poRepository.findById(poId)
                 .orElseThrow(() -> new ResourceNotFoundException("Purchase order not found"));
 
-        Long supplierId = po.getSupplierId();
-        if (supplierId == null) {
-            throw new BadRequestException("Purchase order has no supplier");
-        }
-
-        SupplierProfile supplier = supplierRepository.findById(supplierId)
+        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
 
         if (!supplier.getActive()) {
@@ -58,28 +48,22 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new BadRequestException("No deliveries");
         }
 
-        DeliveryRecord delivery = deliveries.get(0); // Use first delivery
+        DeliveryRecord delivery = deliveries.get(0);
         int delayDays = (int) ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), delivery.getActualDeliveryDate());
-
-        String delaySeverity;
-        if (delayDays <= 0) {
-            delaySeverity = "ON_TIME";
-        } else if (delayDays <= 3) {
-            delaySeverity = "MINOR";
-        } else if (delayDays <= 7) {
-            delaySeverity = "MODERATE";
-        } else {
-            delaySeverity = "SEVERE";
-        }
+        
+        String severity;
+        if (delayDays <= 0) severity = "ON_TIME";
+        else if (delayDays <= 3) severity = "MINOR";
+        else if (delayDays <= 7) severity = "MODERATE";
+        else severity = "SEVERE";
 
         double score = Math.max(0, 100 - (delayDays * 5));
 
-        DelayScoreRecord delayScore = new DelayScoreRecord(supplierId, poId, delayDays, delaySeverity, score);
-        DelayScoreRecord saved = delayScoreRecordRepository.save(delayScore);
+        DelayScoreRecord scoreRecord = new DelayScoreRecord(po.getSupplierId(), poId, delayDays, severity, score);
+        DelayScoreRecord saved = delayScoreRecordRepository.save(scoreRecord);
 
-        if ("SEVERE".equals(delaySeverity)) {
-            SupplierRiskAlert alert = new SupplierRiskAlert(supplierId, "HIGH", 
-                "Severe delay detected for PO: " + po.getPoNumber());
+        if ("SEVERE".equals(severity)) {
+            SupplierRiskAlert alert = new SupplierRiskAlert(po.getSupplierId(), "HIGH", "Severe delay detected");
             riskAlertService.createAlert(alert);
         }
 

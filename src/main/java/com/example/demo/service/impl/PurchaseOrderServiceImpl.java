@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
-
     private final PurchaseOrderRecordRepository poRepository;
     private final SupplierProfileRepository supplierProfileRepository;
 
@@ -25,12 +24,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
-        Long supplierId = po.getSupplierId();
-        if (supplierId == null) {
-            throw new BadRequestException("Invalid supplierId");
-        }
-        
-        SupplierProfile supplier = supplierProfileRepository.findById(supplierId)
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
                 .orElseThrow(() -> new BadRequestException("Invalid supplierId"));
 
         if (!supplier.getActive()) {
@@ -51,9 +45,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public Optional<PurchaseOrderRecord> getPOById(Long id) {
-        if (id == null) {
-            return Optional.empty();
-        }
         return poRepository.findById(id);
     }
 

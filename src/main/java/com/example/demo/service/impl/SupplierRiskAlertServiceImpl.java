@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
-
     private final SupplierRiskAlertRepository riskAlertRepository;
 
     public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
@@ -30,9 +29,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        if (alertId == null) {
-            throw new ResourceNotFoundException("Alert not found");
-        }
         SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
         alert.setResolved(true);

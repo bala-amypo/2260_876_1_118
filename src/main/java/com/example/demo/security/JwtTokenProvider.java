@@ -11,14 +11,15 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-
-    private final SecretKey key;
+    private final String secret;
     private final long validityInMs;
+    private final SecretKey key;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secret, 
                            @Value("${jwt.validity}") long validityInMs) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.secret = secret;
         this.validityInMs = validityInMs;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(AppUser user) {
@@ -29,7 +30,6 @@ public class JwtTokenProvider {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole())
                 .claim("userId", user.getId())
-                .claim("username", user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key)
@@ -46,20 +46,20 @@ public class JwtTokenProvider {
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
 
     public String getRoleFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
         return claims.get("role", String.class);
-    }
-    
-    public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody();
-        return claims.get("username", String.class);
     }
 }

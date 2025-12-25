@@ -33,8 +33,8 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(created);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PurchaseOrderRecord> getPOById(@PathVariable Long id) {
+  @GetMapping("/{id}")
+public ResponseEntity<PurchaseOrderRecord> getPOById(@PathVariable Long id) {
     PurchaseOrderRecord po = purchaseOrderService.getPOById(id)
             .orElseThrow(() ->
                     new ResourceNotFoundException("PO not found"));

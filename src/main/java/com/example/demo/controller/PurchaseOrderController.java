@@ -33,14 +33,16 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(created);
     }
 
-  @GetMapping("/{id}")
-public ResponseEntity<PurchaseOrderRecord> getPOById(@PathVariable Long id) {
-    PurchaseOrderRecord po = purchaseOrderService.getPOById(id)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("PO not found"));
-    return ResponseEntity.ok(po);
-}
+    @GetMapping("/{id}")
+    @Operation(summary = "Get purchase order by ID")
+    public ResponseEntity<PurchaseOrderRecord> getPOById(
+            @Parameter(name = "id") @PathVariable Long id) {
 
+        PurchaseOrderRecord po = purchaseOrderService.getPOById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PO not found"));
+
+        return ResponseEntity.ok(po);
+    }
 
     @GetMapping("/supplier/{supplierId}")
     @Operation(summary = "Get purchase orders by supplier")

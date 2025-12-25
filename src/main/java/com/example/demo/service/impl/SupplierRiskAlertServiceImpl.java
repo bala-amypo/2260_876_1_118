@@ -12,53 +12,35 @@ import java.util.List;
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    private final SupplierRiskAlertRepository riskAlertRepository;
+    private final SupplierRiskAlertRepository repo;
 
-    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
-        this.riskAlertRepository = riskAlertRepository;
+    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-
-        // 🔴 Minimal validation expected by tests
-        if (alert == null || alert.getSupplierId() == null) {
-            throw new BadRequestException("Invalid alert details");
-        }
-
-        // 🔴 default flag expected by tests
         alert.setResolved(false);
-
-        SupplierRiskAlert saved = riskAlertRepository.save(alert);
-
-        // 🔴 Mockito safety (CRITICAL)
-        return saved != null ? saved : alert;
+        return repo.save(alert);
     }
 
     @Override
-public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-    return riskAlertRepository.findBySupplierId(supplierId);
+    public SupplierRiskAlert resolveAlert(Long id) {
+        SupplierRiskAlert alert = repo.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Alert not found"));
+        alert.setResolved(true);
+        return repo.save(alert);
+    }
+
+    @Override
+    public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
+        return repo.findBySupplierId(supplierId);
+    }
+
+    @Override
+    public List<SupplierRiskAlert> getAllAlerts() {
+        return repo.findAll();
+    }
 }
 
-@Override
-public List<SupplierRiskAlert> getAllAlerts() {
-    return riskAlertRepository.findAll();
-}
-
-@Override
-public SupplierRiskAlert resolveAlert(Long alertId) {
-
-    SupplierRiskAlert alert =
-            riskAlertRepository.findById(alertId)
-                    .orElse(new SupplierRiskAlert());
-
-    alert.setResolved(true);
-
-    SupplierRiskAlert saved = riskAlertRepository.save(alert);
-    return saved != null ? saved : alert;
-}
-
-
-
-    
-}

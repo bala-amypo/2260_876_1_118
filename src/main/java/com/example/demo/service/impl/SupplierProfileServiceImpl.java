@@ -24,16 +24,17 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
         return saved != null ? saved : supplier;
     }
 
+    // 🔴 DIRECT RETURN (line 89)
     @Override
-    public Optional<SupplierProfile> getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id);
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
-    // 🔴 DIRECT RETURN — THIS FIXES THE LAST ERROR
+    // 🔴 OPTIONAL RETURN (lines 147, 156)
     @Override
-    public SupplierProfile getBySupplierCode(String supplierCode) {
-        return supplierProfileRepository.findBySupplierCodeIgnoreCase(supplierCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+        return supplierProfileRepository.findBySupplierCodeIgnoreCase(supplierCode);
     }
 
     @Override
@@ -43,8 +44,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
-        SupplierProfile supplier = getSupplierById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+        SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
 
         SupplierProfile saved = supplierProfileRepository.save(supplier);

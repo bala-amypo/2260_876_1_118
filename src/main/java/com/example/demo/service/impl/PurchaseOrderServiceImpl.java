@@ -55,10 +55,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     // 🔴 Tests expect NON-OPTIONAL
     @Override
-    public PurchaseOrderRecord getPOById(Long id) {
-        return poRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PO not found"));
+    public Optional<PurchaseOrderRecord> getPOById(Long id) {
+        return poRepository.findById(id);
     }
+
 
     @Override
     public List<PurchaseOrderRecord> getAllPurchaseOrders() {

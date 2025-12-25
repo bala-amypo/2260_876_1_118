@@ -27,7 +27,7 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
         }
 
         if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
-            throw new BadRequestException("Delivered quantity must be >=");
+            throw new BadRequestException("Delivered quantity must be >= 0");
         }
 
         return deliveryRepository.save(delivery);

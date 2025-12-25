@@ -16,6 +16,7 @@ public class DeliveryRecord {
     private LocalDate actualDeliveryDate;
     private Integer deliveredQuantity;
     private String notes;
+    private Integer orderedQuantity;
 
     public DeliveryRecord() {}
 
@@ -32,6 +33,14 @@ public class DeliveryRecord {
 
     public Long getPoId() { return poId; }
     public void setPoId(Long poId) { this.poId = poId; }
+     // ✅ ADD THIS
+    public Integer getOrderedQuantity() {
+        return orderedQuantity;
+    }
+
+    public void setOrderedQuantity(Integer orderedQuantity) {
+        this.orderedQuantity = orderedQuantity;
+    }
 
     public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
     public void setActualDeliveryDate(LocalDate actualDeliveryDate) { this.actualDeliveryDate = actualDeliveryDate; }
@@ -41,4 +50,6 @@ public class DeliveryRecord {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+      // ✅ ADD THIS
+    
 }

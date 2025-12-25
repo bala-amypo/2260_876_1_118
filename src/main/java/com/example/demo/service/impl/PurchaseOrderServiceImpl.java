@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.PurchaseOrderRecord;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
@@ -37,10 +39,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return poRepository.save(po);
     }
 
-    // ✅ MATCHES INTERFACE EXACTLY
     @Override
-    public Optional<PurchaseOrderRecord> getPOById(Long id) {
-        return poRepository.findById(id);
+    public PurchaseOrderRecord getPOById(Long id) {
+        return poRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("PO not found"));
     }
 
     @Override

@@ -9,10 +9,10 @@ public interface PurchaseOrderService {
 
     PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po);
 
-    List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
-
-    // 🔴 MUST be Optional (tests expect it)
+    // 🔴 MUST return Optional (tests expect this)
     Optional<PurchaseOrderRecord> getPOById(Long id);
+
+    List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
 
     List<PurchaseOrderRecord> getAllPurchaseOrders();
 }

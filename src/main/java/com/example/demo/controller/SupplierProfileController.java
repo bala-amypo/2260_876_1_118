@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/suppliers")
 @Tag(name = "Supplier Management")
 public class SupplierProfileController {
+
     private final SupplierProfileService supplierProfileService;
 
     public SupplierProfileController(SupplierProfileService supplierProfileService) {
@@ -22,14 +24,22 @@ public class SupplierProfileController {
 
     @PostMapping
     @Operation(summary = "Create new supplier")
-    public ResponseEntity<SupplierProfile> createSupplier(@RequestBody SupplierProfile supplier) {
-        return ResponseEntity.ok(supplierProfileService.createSupplier(supplier));
+    public ResponseEntity<SupplierProfile> createSupplier(
+            @RequestBody SupplierProfile supplier) {
+
+        SupplierProfile created = supplierProfileService.createSupplier(supplier);
+        return ResponseEntity.ok(created);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get supplier by ID")
-    public ResponseEntity<SupplierProfile> getSupplier(@Parameter(name = "id") @PathVariable Long id) {
-        return ResponseEntity.ok(supplierProfileService.getSupplierById(id));
+    public ResponseEntity<SupplierProfile> getSupplier(
+            @Parameter(name = "id") @PathVariable Long id) {
+
+        SupplierProfile supplier = supplierProfileService.getSupplierById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+
+        return ResponseEntity.ok(supplier);
     }
 
     @GetMapping
@@ -43,6 +53,10 @@ public class SupplierProfileController {
     public ResponseEntity<SupplierProfile> updateSupplierStatus(
             @Parameter(name = "id") @PathVariable Long id,
             @Parameter(name = "active") @RequestParam boolean active) {
-        return ResponseEntity.ok(supplierProfileService.updateSupplierStatus(id, active));
+
+        SupplierProfile updated =
+                supplierProfileService.updateSupplierStatus(id, active);
+
+        return ResponseEntity.ok(updated);
     }
 }

@@ -38,11 +38,11 @@ public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 }
 
 
-
     @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
-        return deliveryRepository.findByPoId(poId);
-    }
+    return deliveryRepository.findByPoId(poId);
+}
+
 
     @Override
     public List<DeliveryRecord> getAllDeliveries() {

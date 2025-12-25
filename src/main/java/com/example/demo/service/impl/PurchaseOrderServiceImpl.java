@@ -54,8 +54,9 @@ public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
 
     @Override
     public List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId) {
-        return poRepository.findBySupplierId(supplierId);
-    }
+    return poRepository.findBySupplierId(supplierId);
+}
+
 
     // 🔴 Tests expect NON-OPTIONAL
     @Override

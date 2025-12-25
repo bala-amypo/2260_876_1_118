@@ -20,24 +20,20 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
-        SupplierProfile saved = supplierProfileRepository.save(supplier);
-        return saved != null ? saved : supplier;
+        return supplierProfileRepository.save(supplier);
     }
 
-    // 🔴 DIRECT RETURN (line 89)
-// ✅ MUST THROW
     @Override
     public SupplierProfile getSupplierById(Long id) {
         return supplierProfileRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Supplier not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
-    // ✅ Mockito + tests expect EXACT method
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
         return supplierProfileRepository.findBySupplierCode(supplierCode);
     }
+
     @Override
     public List<SupplierProfile> getAllSuppliers() {
         return supplierProfileRepository.findAll();
@@ -47,8 +43,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     public SupplierProfile updateSupplierStatus(Long id, boolean active) {
         SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
-
-        SupplierProfile saved = supplierProfileRepository.save(supplier);
-        return saved != null ? saved : supplier;
+        return supplierProfileRepository.save(supplier);
     }
 }

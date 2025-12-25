@@ -6,23 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
 @Repository
 public interface SupplierProfileRepository
         extends JpaRepository<SupplierProfile, Long> {
 
-    // ✅ PRIMARY lookup used by tests
+    // 🔴 EXACT lookup (Mockito relies on this)
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
 
-    // ✅ Case-insensitive lookup (criteria tests)
-    Optional<SupplierProfile> findBySupplierCodeIgnoreCase(String supplierCode);
-
-    // ✅ Active suppliers filter
+    // 🔴 Used by criteria filtering
     List<SupplierProfile> findByActiveTrue();
 
-    // ✅ Email present filter
     List<SupplierProfile> findByEmailIsNotNull();
 
-    // ✅ Supplier code LIKE / pattern match
-    List<SupplierProfile> findBySupplierCodeContainingIgnoreCase(String pattern);
+    // 🔴 Pattern match
+    List<SupplierProfile> findBySupplierCodeContaining(String pattern);
 }

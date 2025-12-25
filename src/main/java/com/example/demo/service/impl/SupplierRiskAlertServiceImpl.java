@@ -55,4 +55,5 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public List<SupplierRiskAlert> getAllAlerts() {
         return riskAlertRepository.findAll();
     }
+    
 }

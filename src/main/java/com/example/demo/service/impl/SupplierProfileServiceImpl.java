@@ -36,10 +36,10 @@ public SupplierProfile getSupplierById(Long id) {
 
 
     // 🔴 OPTIONAL RETURN (lines 147, 156)
-    @Override
-    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        return supplierProfileRepository.findBySupplierCodeIgnoreCase(supplierCode);
-    }
+   @Override
+public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+    return supplierProfileRepository.findBySupplierCode(supplierCode);
+}
 
     @Override
     public List<SupplierProfile> getAllSuppliers() {

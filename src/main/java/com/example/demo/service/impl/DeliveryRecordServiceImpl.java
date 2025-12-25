@@ -24,13 +24,12 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 @Override
 public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
-    if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
-        throw new BadRequestException("Delivered quantity must be >= 0");
-    }
-
-    // ❗ Invalid PO → exception (tests expect this)
     if (delivery.getPoId() == null) {
         throw new BadRequestException("Invalid PO id");
+    }
+
+    if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
+        throw new BadRequestException("Delivered quantity must be >= 0");
     }
 
     DeliveryRecord saved = deliveryRepository.save(delivery);
@@ -38,10 +37,11 @@ public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 }
 
 
+
     @Override
     public List<DeliveryRecord> getDeliveriesByPO(Long poId) {
     return deliveryRepository.findByPoId(poId);
-}
+    }
 
 
     @Override

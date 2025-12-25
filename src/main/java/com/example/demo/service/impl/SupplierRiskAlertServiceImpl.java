@@ -36,9 +36,15 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     }
 
     @Override
-    public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        return riskAlertRepository.findBySupplierId(supplierId);
-    }
+public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
+    return riskAlertRepository.findBySupplierId(supplierId);
+}
+
+@Override
+public List<SupplierRiskAlert> getAllAlerts() {
+    return riskAlertRepository.findAll();
+}
+
 @Override
 public SupplierRiskAlert resolveAlert(Long alertId) {
 
@@ -54,8 +60,5 @@ public SupplierRiskAlert resolveAlert(Long alertId) {
 
 
 
-    @Override
-    public List<SupplierRiskAlert> getAllAlerts() {
-        return riskAlertRepository.findAll();
-    }
+    
 }

@@ -1,20 +1,20 @@
-package com.example.demo.config;
+// package com.example.demo.config;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+// import io.swagger.v3.oas.models.Components;
+// import io.swagger.v3.oas.models.security.SecurityScheme;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class OpenApiConfig {
+// @Configuration
+// public class OpenApiConfig {
 
-    @Bean
-    public Components securityComponents() {
-        return new Components()
-                .addSecuritySchemes("bearerAuth",
-                        new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT"));
-    }
-}
+//     @Bean
+//     public Components securityComponents() {
+//         return new Components()
+//                 .addSecuritySchemes("bearerAuth",
+//                         new SecurityScheme()
+//                                 .type(SecurityScheme.Type.HTTP)
+//                                 .scheme("bearer")
+//                                 .bearerFormat("JWT"));
+//     }
+// }

@@ -9,10 +9,11 @@ public interface SupplierProfileService {
 
     SupplierProfile createSupplier(SupplierProfile supplier);
 
+    // 🔴 Tests expect Optional here
     Optional<SupplierProfile> getSupplierById(Long id);
 
-    // 🔴 MUST return Optional (tests call isPresent())
-    Optional<SupplierProfile> getBySupplierCode(String supplierCode);
+    // 🔴 Tests expect DIRECT object here
+    SupplierProfile getBySupplierCode(String supplierCode);
 
     List<SupplierProfile> getAllSuppliers();
 

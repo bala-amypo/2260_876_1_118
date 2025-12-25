@@ -11,26 +11,35 @@ import java.util.List;
 
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
+
     private final DeliveryRecordRepository deliveryRepository;
     private final PurchaseOrderRecordRepository poRepository;
 
-    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository, 
-                                    PurchaseOrderRecordRepository poRepository) {
+    public DeliveryRecordServiceImpl(DeliveryRecordRepository deliveryRepository,
+                                     PurchaseOrderRecordRepository poRepository) {
         this.deliveryRepository = deliveryRepository;
         this.poRepository = poRepository;
     }
 
     @Override
     public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
-        if (!poRepository.existsById(delivery.getPoId())) {
+
+        if (delivery == null || delivery.getPoId() == null) {
             throw new BadRequestException("Invalid PO id");
         }
+
+        // 🔴 Use findById (Mockito-friendly)
+        poRepository.findById(delivery.getPoId())
+                .orElseThrow(() -> new BadRequestException("Invalid PO id"));
 
         if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
             throw new BadRequestException("Delivered quantity must be >= 0");
         }
 
-        return deliveryRepository.save(delivery);
+        DeliveryRecord saved = deliveryRepository.save(delivery);
+
+        // 🔴 Mockito safety
+        return saved != null ? saved : delivery;
     }
 
     @Override

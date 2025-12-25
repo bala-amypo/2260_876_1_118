@@ -18,16 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @Tag(name = "Authentication")
 public class AuthController {
-
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final AppUserRepository appUserRepository;
 
     public AuthController(CustomUserDetailsService userDetailsService,
-                          JwtTokenProvider jwtTokenProvider,
-                          PasswordEncoder passwordEncoder,
-                          AppUserRepository appUserRepository) {
+                         JwtTokenProvider jwtTokenProvider,
+                         PasswordEncoder passwordEncoder,
+                         AppUserRepository appUserRepository) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
@@ -35,25 +34,33 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Register a new user", description = "Registers a new user with email, password and role.")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    @Operation(summary = "Register new user")
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
         if (appUserRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
-        AppUser user = new AppUser(request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getRole());
+
+        AppUser user = new AppUser(
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getRole()
+        );
         AppUser saved = appUserRepository.save(user);
-        return ResponseEntity.ok(new ApiResponse(true, "User registered", saved));
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", saved));
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Login", description = "Authenticates user and returns JWT token.")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    @Operation(summary = "Login user")
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        
         if (!passwordEncoder.matches(request.getPassword(), userDetails.getPassword())) {
-            return ResponseEntity.status(401).body(new ApiResponse(false, "Invalid credentials"));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials"));
         }
+
         AppUser user = appUserRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtTokenProvider.generateToken(user);
+        
         return ResponseEntity.ok(new ApiResponse(true, "Login successful", token));
     }
 }

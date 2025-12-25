@@ -26,10 +26,14 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     // 🔴 DIRECT RETURN (line 89)
     @Override
-    public SupplierProfile getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
-    }
+public SupplierProfile getSupplierById(Long id) {
+    SupplierProfile supplier =
+            supplierProfileRepository.findById(id)
+                    .orElse(new SupplierProfile());
+
+    return supplier;
+}
+
 
     // 🔴 OPTIONAL RETURN (lines 147, 156)
     @Override

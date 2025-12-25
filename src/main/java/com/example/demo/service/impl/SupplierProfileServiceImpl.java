@@ -23,11 +23,12 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
         return supplierProfileRepository.save(supplier);
     }
 
-    @Override
-    public SupplierProfile getSupplierById(Long id) {
-        return supplierProfileRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
-    }
+  @Override
+   public SupplierProfile getSupplierById(Long id) {
+    return supplierProfileRepository.findById(id)
+            .orElse(new SupplierProfile());
+}
+
 
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {

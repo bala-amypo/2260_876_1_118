@@ -29,6 +29,7 @@ public class JwtTokenProvider {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole())
                 .claim("userId", user.getId())
+                .claim("username", user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key)
@@ -54,5 +55,11 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token).getBody();
         return claims.get("role", String.class);
+    }
+    
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody();
+        return claims.get("username", String.class);
     }
 }

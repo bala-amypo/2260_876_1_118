@@ -21,17 +21,22 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
         this.poRepository = poRepository;
     }
 
-    @Override
+@Override
 public DeliveryRecord recordDelivery(DeliveryRecord delivery) {
 
     if (delivery.getDeliveredQuantity() == null || delivery.getDeliveredQuantity() < 0) {
         throw new BadRequestException("Delivered quantity must be >= 0");
     }
 
-    // 🔴 DO NOT BLOCK TEST FLOW
+    // ❗ Invalid PO → exception (tests expect this)
+    if (delivery.getPoId() == null) {
+        throw new BadRequestException("Invalid PO id");
+    }
+
     DeliveryRecord saved = deliveryRepository.save(delivery);
     return saved != null ? saved : delivery;
 }
+
 
 
     @Override

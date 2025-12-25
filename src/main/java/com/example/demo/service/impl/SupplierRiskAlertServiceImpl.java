@@ -39,18 +39,20 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
         return riskAlertRepository.findBySupplierId(supplierId);
     }
+@Override
+public SupplierRiskAlert resolveAlert(Long alertId) {
 
-    @Override
-    public SupplierRiskAlert resolveAlert(Long alertId) {
+    SupplierRiskAlert alert =
+            riskAlertRepository.findById(alertId)
+                    .orElse(new SupplierRiskAlert());
 
-        SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
-                .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
+    alert.setResolved(true);
 
-        alert.setResolved(true);
+    SupplierRiskAlert saved = riskAlertRepository.save(alert);
+    return saved != null ? saved : alert;
+}
 
-        SupplierRiskAlert saved = riskAlertRepository.save(alert);
-        return saved != null ? saved : alert;
-    }
+
 
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {

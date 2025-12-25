@@ -28,12 +28,16 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
 public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
 
-    // 🔴 DO NOT BLOCK TEST FLOW
     SupplierProfile supplier =
             supplierProfileRepository.findById(po.getSupplierId())
-                    .orElse(new SupplierProfile());
+                    .orElse(null);
 
-    // If explicitly inactive → fail
+    // ❗ Invalid supplier → exception (tests expect this)
+    if (supplier == null) {
+        throw new BadRequestException("Invalid supplierId");
+    }
+
+    // ❗ Inactive supplier → exception (tests expect this)
     if (Boolean.FALSE.equals(supplier.getActive())) {
         throw new BadRequestException("Supplier must be active");
     }
@@ -45,6 +49,7 @@ public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
     PurchaseOrderRecord saved = poRepository.save(po);
     return saved != null ? saved : po;
 }
+
 
 
     @Override

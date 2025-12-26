@@ -13,7 +13,7 @@ public class DeliveryRecordController {
     
     private final DeliveryRecordService deliveryRecordService;
 
-    public DeliveryController(DeliveryRecordService deliveryRecordService) {
+    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
         this.deliveryRecordService = deliveryRecordService;
     }
 

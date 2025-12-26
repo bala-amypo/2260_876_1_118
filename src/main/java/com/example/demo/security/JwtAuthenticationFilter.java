@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,16 +38,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
-            username = jwtTokenProvider.getUsername(token); // your method in JwtTokenProvider
+            username = jwtTokenProvider.getUsername(token);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userOpt = userRepository.findByUsername(username);
-            if (userOpt.isPresent() && jwtTokenProvider.validateToken(token)) {
-                var user = userOpt.get();
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        user, null, user.getRole().getAuthorities() // implement getAuthorities() in Role enum
-                );
+            AppUser user = userRepository.findByUsername(username).orElse(null);
+            if (user != null && jwtTokenProvider.validateToken(token)) {
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(user, null,
+                                java.util.Collections.singletonList(user.getRole()));
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

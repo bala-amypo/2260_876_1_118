@@ -1,9 +1,14 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
 public class DeliveryRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long poId;
     private Integer deliveredQuantity;
     private LocalDate actualDeliveryDate;

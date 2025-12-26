@@ -1,8 +1,11 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
 public class PurchaseOrderRecord {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long supplierId;
     private Integer quantity;

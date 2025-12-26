@@ -1,6 +1,9 @@
 package com.example.demo.model;
+import jakarta.persistence.*;
 
 public class SupplierRiskAlert {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long supplierId;
     private String alertLevel;

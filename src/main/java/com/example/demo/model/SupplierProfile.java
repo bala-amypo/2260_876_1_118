@@ -1,6 +1,10 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+
 public class SupplierProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String supplierCode;
     private String supplierName;

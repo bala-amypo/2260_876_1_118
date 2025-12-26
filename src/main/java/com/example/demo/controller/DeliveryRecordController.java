@@ -7,10 +7,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveries")
-public class DeliveryController {
+public class DeliveryRecordController {
     private final DeliveryRecordService deliveryRecordService;
 
-    public DeliveryController(DeliveryRecordService deliveryRecordService) {
+    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
         this.deliveryRecordService = deliveryRecordService;
     }
 

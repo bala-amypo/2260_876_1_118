@@ -8,7 +8,9 @@ import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.PurchaseOrderService;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private final PurchaseOrderRecordRepository poRepository;
     private final SupplierProfileRepository supplierProfileRepository;

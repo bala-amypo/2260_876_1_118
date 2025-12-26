@@ -1,13 +1,11 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.stereotype.Service;
-
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -16,58 +14,56 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DelayScoreRecordRepository delayScoreRecordRepository;
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
-    private final SupplierProfileRepository supplierRepository;
+    private final SupplierProfileRepository supplierProfileRepository;
     private final SupplierRiskAlertService riskAlertService;
 
     public DelayScoreServiceImpl(DelayScoreRecordRepository delayScoreRecordRepository,
-                                PurchaseOrderRecordRepository poRepository,
-                                DeliveryRecordRepository deliveryRepository,
-                                SupplierProfileRepository supplierRepository,
-                                SupplierRiskAlertService riskAlertService) {
+                               PurchaseOrderRecordRepository poRepository,
+                               DeliveryRecordRepository deliveryRepository,
+                               SupplierProfileRepository supplierProfileRepository,
+                               SupplierRiskAlertService riskAlertService) {
         this.delayScoreRecordRepository = delayScoreRecordRepository;
         this.poRepository = poRepository;
         this.deliveryRepository = deliveryRepository;
-        this.supplierRepository = supplierRepository;
+        this.supplierProfileRepository = supplierProfileRepository;
         this.riskAlertService = riskAlertService;
     }
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        PurchaseOrderRecord po = poRepository.findById(poId)
-                .orElseThrow(() -> new ResourceNotFoundException("Purchase order not found"));
+        PurchaseOrderRecord po = poRepository.findById(poId).orElse(null);
+        if (po == null) return null;
 
-        SupplierProfile supplier = supplierRepository.findById(po.getSupplierId())
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
-
-        if (!supplier.getActive()) {
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId()).orElse(null);
+        if (supplier == null || !supplier.getActive()) {
             throw new BadRequestException("Inactive supplier");
         }
 
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
-            throw new BadRequestException("No deliveries");
+            throw new BadRequestException("No deliveries found for PO");
         }
 
         DeliveryRecord delivery = deliveries.get(0);
         int delayDays = (int) ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), delivery.getActualDeliveryDate());
         
-        String severity;
-        if (delayDays <= 0) severity = "ON_TIME";
-        else if (delayDays <= 3) severity = "MINOR";
-        else if (delayDays <= 7) severity = "MODERATE";
-        else severity = "SEVERE";
-
-        double score = Math.max(0, 100 - (delayDays * 5));
-
-        DelayScoreRecord scoreRecord = new DelayScoreRecord(po.getSupplierId(), poId, delayDays, severity, score);
-        DelayScoreRecord saved = delayScoreRecordRepository.save(scoreRecord);
-
-        if ("SEVERE".equals(severity)) {
-            SupplierRiskAlert alert = new SupplierRiskAlert(po.getSupplierId(), "HIGH", "Severe delay detected");
-            riskAlertService.createAlert(alert);
+        DelayScoreRecord record = new DelayScoreRecord();
+        record.setPoId(poId);
+        record.setSupplierId(po.getSupplierId());
+        record.setDelayDays(delayDays);
+        
+        if (delayDays <= 0) {
+            record.setDelaySeverity("ON_TIME");
+            record.setScore(100.0);
+        } else if (delayDays <= 3) {
+            record.setDelaySeverity("MINOR");
+            record.setScore(80.0);
+        } else {
+            record.setDelaySeverity("SEVERE");
+            record.setScore(50.0);
         }
 
-        return saved;
+        return delayScoreRecordRepository.save(record);
     }
 
     @Override

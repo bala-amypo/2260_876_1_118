@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
     private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(AppUserRepository userRepository, PasswordEncoder passwordEncoder, 
-                         JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthController(AppUserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtTokenProvider jwtTokenProvider,
+                          AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -30,32 +33,39 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
+
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username already taken");
         }
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already taken");
         }
 
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
 
-        AppUser savedUser = userRepository.save(user);
-        return jwtTokenProvider.generateToken(savedUser);
+        userRepository.save(user);
+
+        // ✅ PASS STRING (username OR email)
+        return jwtTokenProvider.generateToken(user.getUsername());
     }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
         );
-        
-        AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
-        return jwtTokenProvider.generateToken(user);
+
+        // ✅ token based on authenticated username
+        return jwtTokenProvider.generateToken(request.getUsername());
     }
 
     @PostMapping("/validate")

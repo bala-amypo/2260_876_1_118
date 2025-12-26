@@ -2,7 +2,9 @@ package com.example.demo.security;
 
 import com.example.demo.model.Role;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 @Component
@@ -47,7 +49,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public String resolveToken(javax.servlet.http.HttpServletRequest request) {
+    public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);

@@ -6,18 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+
 @Repository
-public interface SupplierProfileRepository
-        extends JpaRepository<SupplierProfile, Long> {
-
-    // 🔴 EXACT lookup (Mockito relies on this)
+public interface SupplierProfileRepository extends JpaRepository<SupplierProfile, Long> {
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
-
-    // 🔴 Used by criteria filtering
     List<SupplierProfile> findByActiveTrue();
-
-    List<SupplierProfile> findByEmailIsNotNull();
-
-    // 🔴 Pattern match
-    List<SupplierProfile> findBySupplierCodeContaining(String pattern);
 }

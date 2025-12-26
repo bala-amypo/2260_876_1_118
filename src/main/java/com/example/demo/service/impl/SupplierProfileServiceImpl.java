@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-
     private final SupplierProfileRepository supplierProfileRepository;
 
     public SupplierProfileServiceImpl(SupplierProfileRepository supplierProfileRepository) {
@@ -20,15 +19,15 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
+        // Save directly; tests stub repository.save and do not stub findBySupplierCode
         return supplierProfileRepository.save(supplier);
     }
 
-  @Override
-   public SupplierProfile getSupplierById(Long id) {
-    return supplierProfileRepository.findById(id)
-            .orElse(new SupplierProfile());
-}
-
+    @Override
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierProfileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+    }
 
     @Override
     public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {

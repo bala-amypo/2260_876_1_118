@@ -17,7 +17,7 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // Getters and Setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getUsername() { return username; }

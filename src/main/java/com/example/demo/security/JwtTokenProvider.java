@@ -12,11 +12,8 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    // Secret key for signing the token (use a more secure key in production)
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-    // Token validity (e.g., 1 hour)
-    private final long validityInMilliseconds = 3600000;
+    private final long validityInMilliseconds = 3600000; // 1 hour
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();

@@ -2,32 +2,30 @@ package com.example.demo.security;
 
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final AppUserRepository appUserRepository;
 
-    public CustomUserDetailsService(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
+    private final AppUserRepository userRepository;
+
+    public CustomUserDetailsService(AppUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser user = appUserRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        AppUser user = userRepository.findByUsername(usernameOrEmail)
+                .orElseGet(() -> userRepository.findByEmail(usernameOrEmail)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail)));
 
-        return new User(
-                user.getEmail(),
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
-        );
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(user.getRole())
+                .build();
     }
 }

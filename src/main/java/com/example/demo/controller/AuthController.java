@@ -4,15 +4,15 @@ import com.example.demo.model.AppUser;
 import com.example.demo.model.Role;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AppUserRepository userRepository;
@@ -31,33 +31,37 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody AppUser request) {
-        if (userRepository.existsByUsername(request.getUsername()))
-            throw new RuntimeException("Username already taken");
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new RuntimeException("Email already taken");
+    public ResponseEntity<?> register(@RequestBody AppUser request) {
+        if (userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.badRequest().body("Username or Email already exists!");
+        }
 
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
-        AppUser savedUser = userRepository.save(request);
+        AppUser user = new AppUser();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.USER);
 
-        return jwtTokenProvider.generateToken(savedUser.getUsername(), savedUser.getRole());
+        AppUser savedUser = userRepository.save(user);
+
+        String token = jwtTokenProvider.generateToken(savedUser.getUsername());
+
+        return ResponseEntity.ok("User registered successfully. Token: " + token);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AppUser request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@RequestBody AppUser request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
 
-        Optional<AppUser> userOpt = userRepository.findByUsername(request.getUsername());
-        if (userOpt.isEmpty()) throw new RuntimeException("User not found");
+            AppUser user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+            String token = jwtTokenProvider.generateToken(user.getUsername());
 
-        AppUser user = userOpt.get();
-        return jwtTokenProvider.generateToken(user.getUsername(), user.getRole());
-    }
-
-    @GetMapping("/validate")
-    public boolean validateToken(@RequestParam String token) {
-        return jwtTokenProvider.validateToken(token);
+            return ResponseEntity.ok("Login successful. Token: " + token);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).body("Invalid username/password");
+        }
     }
 }

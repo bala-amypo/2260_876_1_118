@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 
+@Entity
 public class DeliveryRecord {
 
     @Id

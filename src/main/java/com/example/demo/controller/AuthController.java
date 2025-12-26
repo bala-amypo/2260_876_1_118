@@ -7,6 +7,7 @@ import com.example.demo.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -42,22 +43,19 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
 
-        AppUser savedUser = userRepository.save(user);
+        userRepository.save(user);
 
-        String token = jwtTokenProvider.generateToken(savedUser.getUsername());
-
-        return ResponseEntity.ok("User registered successfully. Token: " + token);
+        return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AppUser request) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            AppUser user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-            String token = jwtTokenProvider.generateToken(user.getUsername());
+            String token = jwtTokenProvider.generateToken(authentication);
 
             return ResponseEntity.ok("Login successful. Token: " + token);
         } catch (AuthenticationException e) {

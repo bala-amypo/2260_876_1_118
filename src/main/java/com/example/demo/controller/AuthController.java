@@ -21,8 +21,10 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(AppUserRepository userRepository, PasswordEncoder passwordEncoder,
-                          JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthController(AppUserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtTokenProvider jwtTokenProvider,
+                          AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -38,15 +40,14 @@ public class AuthController {
             throw new BadRequestException("Email already taken");
         }
 
-        AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail());
-        user.setRole(request.getRole());
+        AppUser user = AppUser.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
+                .role(request.getRole())
+                .build();
 
         AppUser savedUser = userRepository.save(user);
-
-        // Return JWT token
         return jwtTokenProvider.generateToken(savedUser);
     }
 
@@ -56,11 +57,9 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // Fetch user from DB
         AppUser user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
-        // Return JWT token
         return jwtTokenProvider.generateToken(user);
     }
 

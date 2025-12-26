@@ -1,66 +1,65 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
-import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtTokenProvider;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
-@Tag(name = "Authentication")
+@RequestMapping("/api/auth")
 public class AuthController {
-    private final CustomUserDetailsService userDetailsService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AppUserRepository appUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthController(CustomUserDetailsService userDetailsService,
-                         JwtTokenProvider jwtTokenProvider,
-                         PasswordEncoder passwordEncoder,
-                         AppUserRepository appUserRepository) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenProvider = jwtTokenProvider;
+    public AuthController(AppUserRepository userRepository, PasswordEncoder passwordEncoder, 
+                         JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.appUserRepository = appUserRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Register new user")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
-        if (appUserRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
+    public String register(@RequestBody RegisterRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new BadRequestException("Username already taken");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("Email already taken");
         }
 
-        AppUser user = new AppUser(
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getRole()
-        );
-        AppUser saved = appUserRepository.save(user);
-        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", saved));
+        AppUser user = new AppUser();
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setRole(request.getRole());
+
+        AppUser savedUser = userRepository.save(user);
+        return jwtTokenProvider.generateToken(savedUser);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Login user")
-    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+    public String login(@RequestBody LoginRequest request) {
+        Authentication auth = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
         
-        if (!passwordEncoder.matches(request.getPassword(), userDetails.getPassword())) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials"));
-        }
+        AppUser user = new AppUser();
+        user.setUsername(request.getUsername());
+        return jwtTokenProvider.generateToken(user);
+    }
 
-        AppUser user = appUserRepository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtTokenProvider.generateToken(user);
-        
-        return ResponseEntity.ok(new ApiResponse(true, "Login successful", token));
+    @PostMapping("/validate")
+    public boolean validateToken(@RequestParam String token) {
+        return jwtTokenProvider.validateToken(token);
     }
 }

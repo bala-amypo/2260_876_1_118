@@ -16,7 +16,6 @@ public class SupplierRiskAlert {
     private String alertLevel;
     private String message;
     private LocalDateTime alertDate;
-    private String riskLevel; 
 
     @Column(nullable = false)
     private Boolean resolved = false;
@@ -50,14 +49,6 @@ public class SupplierRiskAlert {
 
     public LocalDateTime getAlertDate() { return alertDate; }
     public void setAlertDate(LocalDateTime alertDate) { this.alertDate = alertDate; }
-     // ✅ ADD THIS
-    public String getRiskLevel() {
-        return riskLevel;
-    }
-
-    public void setRiskLevel(String riskLevel) {
-        this.riskLevel = riskLevel;
-    }
 
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }

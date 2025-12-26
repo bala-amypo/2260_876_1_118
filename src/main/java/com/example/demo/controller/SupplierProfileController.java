@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping("/api/suppliers")
 @Tag(name = "Supplier Management")
 public class SupplierProfileController {
-
     private final SupplierProfileService supplierProfileService;
 
     public SupplierProfileController(SupplierProfileService supplierProfileService) {
@@ -23,32 +22,20 @@ public class SupplierProfileController {
 
     @PostMapping
     @Operation(summary = "Create new supplier")
-    public ResponseEntity<SupplierProfile> createSupplier(
-            @RequestBody SupplierProfile supplier) {
-
-        return ResponseEntity.ok(
-                supplierProfileService.createSupplier(supplier)
-        );
+    public ResponseEntity<SupplierProfile> createSupplier(@RequestBody SupplierProfile supplier) {
+        return ResponseEntity.ok(supplierProfileService.createSupplier(supplier));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get supplier by ID")
-    public ResponseEntity<SupplierProfile> getSupplier(
-            @Parameter(name = "id") @PathVariable Long id) {
-
-        // 🔴 DIRECT RETURN (no Optional here)
-        SupplierProfile supplier =
-                supplierProfileService.getSupplierById(id);
-
-        return ResponseEntity.ok(supplier);
+    public ResponseEntity<SupplierProfile> getSupplier(@Parameter(name = "id") @PathVariable Long id) {
+        return ResponseEntity.ok(supplierProfileService.getSupplierById(id));
     }
 
     @GetMapping
     @Operation(summary = "Get all suppliers")
     public ResponseEntity<List<SupplierProfile>> getAllSuppliers() {
-        return ResponseEntity.ok(
-                supplierProfileService.getAllSuppliers()
-        );
+        return ResponseEntity.ok(supplierProfileService.getAllSuppliers());
     }
 
     @PutMapping("/{id}/status")
@@ -56,9 +43,6 @@ public class SupplierProfileController {
     public ResponseEntity<SupplierProfile> updateSupplierStatus(
             @Parameter(name = "id") @PathVariable Long id,
             @Parameter(name = "active") @RequestParam boolean active) {
-
-        return ResponseEntity.ok(
-                supplierProfileService.updateSupplierStatus(id, active)
-        );
+        return ResponseEntity.ok(supplierProfileService.updateSupplierStatus(id, active));
     }
 }

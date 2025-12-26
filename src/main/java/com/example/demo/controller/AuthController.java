@@ -21,10 +21,8 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(AppUserRepository userRepository,
-                          PasswordEncoder passwordEncoder,
-                          JwtTokenProvider jwtTokenProvider,
-                          AuthenticationManager authenticationManager) {
+    public AuthController(AppUserRepository userRepository, PasswordEncoder passwordEncoder,
+                          JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -33,39 +31,37 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
-
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username already taken");
         }
-
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already taken");
         }
 
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
         user.setRole(request.getRole());
 
-        userRepository.save(user);
+        AppUser savedUser = userRepository.save(user);
 
-        // ✅ PASS STRING (username OR email)
-        return jwtTokenProvider.generateToken(user.getUsername());
+        // Return JWT token
+        return jwtTokenProvider.generateToken(savedUser);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // ✅ token based on authenticated username
-        return jwtTokenProvider.generateToken(request.getUsername());
+        // Fetch user from DB
+        AppUser user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        // Return JWT token
+        return jwtTokenProvider.generateToken(user);
     }
 
     @PostMapping("/validate")

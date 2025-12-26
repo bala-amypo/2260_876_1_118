@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-public interface SupplierRiskAlertRepository {
-    Optional<SupplierRiskAlert> findById(Long id);
+@Repository
+public interface SupplierRiskAlertRepository
+        extends JpaRepository<SupplierRiskAlert, Long> {
+
     List<SupplierRiskAlert> findBySupplierId(Long supplierId);
-    List<SupplierRiskAlert> findAll();
-    SupplierRiskAlert save(SupplierRiskAlert alert);
 }

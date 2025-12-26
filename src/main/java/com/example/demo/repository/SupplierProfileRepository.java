@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-public interface SupplierProfileRepository {
-    Optional<SupplierProfile> findById(Long id);
+@Repository
+public interface SupplierProfileRepository
+        extends JpaRepository<SupplierProfile, Long> {
+
     Optional<SupplierProfile> findBySupplierCode(String supplierCode);
-    List<SupplierProfile> findAll();
-    SupplierProfile save(SupplierProfile supplier);
 }

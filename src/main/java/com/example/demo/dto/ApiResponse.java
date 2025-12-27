@@ -1,39 +1,22 @@
 package com.example.demo.dto;
 
-public class ApiResponse<T> {
-    private boolean success;
+public class ApiResponse {
     private String message;
-    private T data;
+    private String token;
 
+    // No-arg constructor
     public ApiResponse() {}
 
-    public ApiResponse(boolean success, String message) {
-        this.success = success;
+    // Constructor with parameters
+    public ApiResponse(String message, String token) {
         this.message = message;
+        this.token = token;
     }
 
-    public ApiResponse(boolean success, String message, T data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
-    }
-
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, "Success", data);
-    }
-
-    public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(true, message, data);
-    }
-
-    public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<>(false, message);
-    }
-
-    public boolean isSuccess() { return success; }
-    public void setSuccess(boolean success) { this.success = success; }
+    // Getters and setters
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
-    public T getData() { return data; }
-    public void setData(T data) { this.data = data; }
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 }

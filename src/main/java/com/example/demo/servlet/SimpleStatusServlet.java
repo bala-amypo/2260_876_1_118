@@ -15,22 +15,8 @@ public class SimpleStatusServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        
         PrintWriter out = response.getWriter();
-        out.println("{");
-        out.println("  \"status\": \"UP\",");
-        out.println("  \"application\": \"Supply Chain Analyzer\",");
-        out.println("  \"timestamp\": \"" + System.currentTimeMillis() + "\"");
-        out.println("}");
-        out.flush();
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        doGet(request, response);
+        out.println("{\"status\": \"OK\", \"service\": \"Supply Chain Analyzer\"}");
     }
 }

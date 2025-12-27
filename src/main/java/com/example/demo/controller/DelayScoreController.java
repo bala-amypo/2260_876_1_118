@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.service.DelayScoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,25 +11,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/delay-scores")
 public class DelayScoreController {
-    
-    private final DelayScoreService delayScoreService;
 
-    public DelayScoreController(DelayScoreService delayScoreService) {
-        this.delayScoreService = delayScoreService;
+    @Autowired
+    private DelayScoreService delayScoreService;
+
+    @PostMapping("/compute/{poId}")
+    public ResponseEntity<DelayScoreRecord> computeScore(@PathVariable Long poId) {
+        DelayScoreRecord score = delayScoreService.computeDelayScore(poId);
+        return ResponseEntity.ok(score);
     }
 
     @GetMapping
     public ResponseEntity<List<DelayScoreRecord>> getAllScores() {
-        return ResponseEntity.ok(delayScoreService.getAllScores());
+        List<DelayScoreRecord> scores = delayScoreService.getAllScores();
+        return ResponseEntity.ok(scores);
     }
 
     @GetMapping("/supplier/{supplierId}")
     public ResponseEntity<List<DelayScoreRecord>> getScoresBySupplier(@PathVariable Long supplierId) {
-        return ResponseEntity.ok(delayScoreService.getScoresBySupplier(supplierId));
-    }
-
-    @PostMapping("/compute/{poId}")
-    public ResponseEntity<DelayScoreRecord> computeDelayScore(@PathVariable Long poId) {
-        return ResponseEntity.ok(delayScoreService.computeDelayScore(poId));
+        List<DelayScoreRecord> scores = delayScoreService.getScoresBySupplier(supplierId);
+        return ResponseEntity.ok(scores);
     }
 }

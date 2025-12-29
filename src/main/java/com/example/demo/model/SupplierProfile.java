@@ -17,11 +17,11 @@ public class SupplierProfile {
     private String email;
     private Boolean active = true;
 
-    // ✅ REQUIRED no-args constructor
+
     public SupplierProfile() {
     }
 
-    // ✅ SAFE constructor for tests
+
     public SupplierProfile(String supplierCode, String supplierName,
                            String email, Boolean active) {
         this.supplierCode = supplierCode;

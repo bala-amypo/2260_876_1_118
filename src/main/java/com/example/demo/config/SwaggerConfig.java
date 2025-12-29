@@ -107,7 +107,7 @@ public class SwaggerConfig {
                 // IMPORTANT: If your proxy handles the "/api" prefix, keep it. 
                 // If not, use the base URL.
                 .servers(List.of(
-                        new Server().url("https://9133.pro604cr.amypo.ai/").description("Default Server")
+                        new Server().url("https://9150.32procr.amypo.ai/").description("Default Server")
                 ));
     }
 }

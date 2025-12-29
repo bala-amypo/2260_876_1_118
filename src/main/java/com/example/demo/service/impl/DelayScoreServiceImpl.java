@@ -1,9 +1,10 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.*; // ✅ FIXED: Must point to the .model package
+import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
+import com.example.demo.service.SupplierRiskAlertService; // <-- interface import
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -16,14 +17,15 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierProfileRepository;
-    private final SupplierRiskAlertServiceImpl riskAlertService; 
+    private final SupplierRiskAlertService riskAlertService; // <-- interface
 
+    // Constructor injection with interface
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayScoreRecordRepository,
             PurchaseOrderRecordRepository poRepository,
             DeliveryRecordRepository deliveryRepository,
             SupplierProfileRepository supplierProfileRepository,
-            SupplierRiskAlertServiceImpl riskAlertService
+            SupplierRiskAlertService riskAlertService // <-- interface
     ) {
         this.delayScoreRecordRepository = delayScoreRecordRepository;
         this.poRepository = poRepository;
